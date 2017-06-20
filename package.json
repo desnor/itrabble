@@ -1,0 +1,23 @@
+{
+  "name": "itrabble",
+  "version": "0.0.1",
+  "description": "Library to add useful methods to iterables eg. Array, Map",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'Error, no test supplied' && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexrevell/itrabble.git"
+  },
+  "keywords": [
+    "iterables",
+    "ES6"
+  ],
+  "author": "Alex Revell <revellalex@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alexrevell/itrabble/issues"
+  },
+  "homepage": "https://github.com/alexrevell/itrabble#readme"
+}
