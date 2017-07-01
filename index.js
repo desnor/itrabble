@@ -1,13 +1,16 @@
-take(['a','b','c'], 2)
-take(new Map([['a', 'a'],['b', 'b'], ['c', 'c']]), 2)
+const take = require('./take')
+const log = require('./log')
 
-function take(iterable, n) {
-  const iterator = iterable[Symbol.iterator]()
-  const result = []
-  while(n > 0) {
-    result.push(iterator.next().value)
-    n--
-  }
-  console.log(result)
-  return result
-}
+const array = ['a','b','c','d','e','f']
+const map = new Map([['a', 'a'],['b', 'b'], ['c', 'c']])
+
+Array.prototype.take = take
+Array.prototype.log = log
+
+Map.prototype.take = take
+
+const first = array.take(6)
+const second = map.take(2)
+
+Array.from(first).log()
+Array.from(second).log()
