@@ -1,0 +1,33 @@
+{
+  "parser": "",
+  "env": {
+    "browser": false,
+    "commonjs": true,
+    "es6": true,
+    "node": true,
+    "mocha": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+        "experimentalObjectRestSpread": true,
+        "modules": true
+    },
+    "sourceType": "module"
+  },
+  "plugins": [],
+  "globals": {
+    "expect": true,
+    "jest": true
+  },
+  "extends": ["eslint:recommended"],
+  "rules": {
+    "indent": ["error", 2],
+    "comma-dangle": ["error", "only-multiline"],
+    "linebreak-style": ["error","unix"],
+    "quotes": ["error","single"],
+    "strict" : 0,
+    "no-console": "off"
+  }
+}
