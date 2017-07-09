@@ -1,5 +1,6 @@
 module.exports = function log() {
-  for (const { value } of this){
-    console.log(value)
+  console.log('iterator result: ', this)
+  for (const value of this){
+    console.log('iterated value: ', value)
   }
 }
