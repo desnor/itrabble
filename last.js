@@ -1,8 +1,15 @@
-module.exports = function *last(n = 1) {
-  const start = this.length - n
-  const iterator = this.slice(start, start + n)[Symbol.iterator]()
-  while(n > 0){
-    yield iterator.next()
-    n--
+module.exports = function *last() {
+  const iterator = this[Symbol.iterator]()
+
+  let isDone = false
+  let lastVal = null
+  while(!isDone) {
+    const { done, value } = iterator.next()
+    isDone = done
+
+    if(isDone){
+      yield { done: isDone, value: lastVal }
+    }
+    lastVal = value
   }
 }
