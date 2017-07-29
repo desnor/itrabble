@@ -1,20 +1,55 @@
-## itrabble
-# Library to extend JS iterables
+# itrabble
 
-# examples:
+## Library to extend JS iterables
 
-`const array = ['a','b','c','d','e','f']`
+### Examples:
 
-`const map = new Map([['a', 'a'],['b', 'b'], ['c', 'c'],['d','d'],['e','e'],['f','f']])`
+```
+// define some iterables
 
-`const string = 'test string'`
+const array = ['a','b','c','d','e','f']
+
+const map = new Map([['a', 'a'],['b', 'b'], ['c', 'c'],['d','d'],['e','e'],['f','f']])
+
+const string = 'test string'
+```
+
+Simply call the `itrabble` property on any entity that has `Object` in its prototype and which has a `Symbol.iterator` property and you'll have access to the itrabble family of methods.
+
+Example usage:
+```
+require('itrabble')
 
 
-```array.itrabble.skipUntil(x => x === 'd') // d e f```
+Array
+array.itrabble.skipUntil(x => x === 'd')
+//  => d e f
 
-```map.itrabble.takeUntil(x => x.includes('e')) // [ 'a', 'a' ] [ 'b', 'b' ] [ 'c', 'c' ] [ 'd', 'd' ]```
+Map
+map.itrabble.takeUntil(x => x.includes('e'))
+//  => [ 'a', 'a' ] [ 'b', 'b' ] [ 'c', 'c' ] [ 'd', 'd' ]
 
-```string.itrabble.takeUntil(x => x === 'i') // t e s t   s t r```
+String
+string.itrabble.takeUntil(x => x === 'i')
+//  => 'test str'
 
-```console.log(...array.itrabble.take(3).zip(array.itrabble.first(), map.itrabble.skip(1).take(3)))
-// [ 'a', 'a', [ 'b', 'b' ] ] [ 'b', undefined, [ 'c', 'c' ] ] [ 'c', undefined, [ 'd', 'd' ] ]```
+All three together
+array.itrabble.zip( array, map, string ).take(3)
+// => [ 'a', 'a', [ 'a', 'a' ], 't' ] [ 'b', 'b', [ 'b', 'b' ], 'e' ] [ 'c', 'c', [ 'c', 'c' ], 's' ]
+```
+
+The format of the end result can be specified with the following methods:
+
+```
+/*  .toArray() => Array */
+
+array.itrabble.skipUntil(x => x === 'd').toArray()
+// => ['d','e','f']
+
+/*  .toMap() => Map */
+
+map.itrabble.takeUntil(x => x.includes('e')).toMap()
+// => Map { 'a' => 'a', 'b' => 'b', 'c' => 'c', 'd' => 'd' }
+
+...more to come
+```

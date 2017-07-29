@@ -1,3 +1,5 @@
+'use strict'
+
 /* eslint-disable no-constant-condition */
 
 function Itrabble(context){
@@ -22,7 +24,9 @@ Itrabble.prototype.toMap = function(){
 }
 
 Itrabble.prototype.buildIterator = function(iteratorFunc){
-  return new Itrabble({[Symbol.iterator]: iteratorFunc.bind(this) })
+  return new Itrabble({
+    [Symbol.iterator]: iteratorFunc.bind(this)
+  })
 }
 
 Itrabble.prototype.first = function(){
@@ -168,6 +172,18 @@ Itrabble.prototype.zip = function(...its){
       if(next.every(elm => elm.done))
         break
       yield(next.map(elm => elm.value))
+    }
+  })
+}
+
+Itrabble.prototype.zipWith = function(callback, ...its){
+  return this.buildIterator(function*(){
+    const iterators = [this[Symbol.iterator](), ...its.map(it => it[Symbol.iterator]())]
+    while(true){
+      let next = iterators.map(it => it.next())
+      if(next.every(elm => elm.done))
+        break
+      yield(callback(...next.map(elm => elm.value)))
     }
   })
 }
