@@ -1,69 +1,10 @@
-// const take = require('./take')
-// const takeUntil = require('./takeUntil')
-// const log = require('./log')
-// const first = require('./first')
-// const last = require('./last')
 require('./itrabble')
 
 const array = ['a','b','c','d','e','f']
-// const map = new Map([['a', 'a'],['b', 'b'], ['c', 'c'],['d','d'],['e','e'],['f','f']])
-// const string = 'test string'
+const map = new Map([['a', 'a'],['b', 'b'], ['c', 'c'],['d','d'],['e','e'],['f','f']])
+const string = 'test string'
 
-
-// function keysIterable(iterable){
-//   return Object.assign({
-//     [Symbol.iterator]: () => {
-//       const iterator = iterable[Symbol.iterator]()
-//
-//       return {
-//         next: () => {
-//           const { done, value: [key] } = iterator.next()
-//           return { done, value: key }
-//         }
-//       }
-//     }
-//   }, Itrabble)
-// }
-
-// // const makeItrabble = iteratee => pipe(
-// //   firstable,
-// //   withConstructor(makeItrabble)
-// // )(iteratee)
-//
-// const Itrabble = {
-//   take(n = 1) {
-//     return takeIterable(n, this)
-//   },
-//   takeUntil(fn) {
-//     return untilIterable(fn, this)
-//   },
-//   filterWith(fn) {
-//     return filterWithIterable(fn, this)
-//   },
-//   first() {
-//     return firstIterable(this)
-//   },
-//   keys() {
-//     return keysIterable(this)
-//   },
-//   toArray() {
-//     return Array.from(this)
-//   },
-//   toMap() {
-//     return new Map(this)
-//   },
-//   toObject() {
-//     const proto = Object.assign({}, Object.getPrototypeOf(this))
-//     return Object.assign(Object.create(proto), this)
-//   },
-//   toStr() {
-//     return String(...this)
-//   },
-//   log() {
-//     console.log(this)
-//     return this
-//   },
-// }
-
-let ary = array.itrabble.takeWhile(x => x !== 'e')
-console.log(ary)
+console.log(...array.itrabble.skipUntil(x => x === 'd')) // d e f
+console.log(...map.itrabble.takeUntil(x => x.includes('e'))) // [ 'a', 'a' ] [ 'b', 'b' ] [ 'c', 'c' ] [ 'd', 'd' ]
+console.log(...string.itrabble.takeUntil(x => x === 'i')) // t e s t   s t r
+console.log(...array.itrabble.take(3).zip(array.itrabble.first(), map.itrabble.skip(1).take(3))) // [ 'a', 'a', [ 'b', 'b' ] ] [ 'b', undefined, [ 'c', 'c' ] ] [ 'c', undefined, [ 'd', 'd' ] ]

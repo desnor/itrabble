@@ -1,3 +1,5 @@
+/* eslint-disable no-constant-condition */
+
 function Itrabble(context){
   if(!this || this.constructor !== Itrabble) return new Itrabble(context)
   this.context = context
@@ -15,8 +17,20 @@ Itrabble.prototype.toArray = function(){
   return Array.from(this)
 }
 
+Itrabble.prototype.toMap = function(){
+  return new Map(this)
+}
+
 Itrabble.prototype.buildIterator = function(iteratorFunc){
   return new Itrabble({[Symbol.iterator]: iteratorFunc.bind(this) })
+}
+
+Itrabble.prototype.first = function(){
+  return this.buildIterator(function*(){
+    for(const elm of this.take(1)){
+      yield elm
+    }
+  })
 }
 
 Itrabble.prototype.last = function(){
