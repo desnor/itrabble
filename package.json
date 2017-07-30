@@ -7,7 +7,7 @@
     "node": ">=6.11.1"
   },
   "scripts": {
-    "test": "echo 'Error, no test supplied' && exit 0"
+    "test": "ava"
   },
   "repository": {
     "type": "git",
@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/desnor/itrabble/issues"
   },
-  "homepage": "https://github.com/desnor/itrabble#readme"
+  "homepage": "https://github.com/desnor/itrabble#readme",
+  "devDependencies": {
+    "ava": "^0.21.0"
+  }
 }
