@@ -3,6 +3,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/desnor/itrabble/badge.svg?branch=master)](https://coveralls.io/github/desnor/itrabble?branch=master)
 [![Build Status](https://travis-ci.org/desnor/itrabble.svg?branch=master)](https://travis-ci.org/desnor/itrabble)
 
+[![NPM](https://nodei.co/npm/itrabble.png)](https://npmjs.org/package/itrabble)
+
 ## Library to extend JavaScript ES6 iterables
 
 ### Why?
