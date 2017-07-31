@@ -52,4 +52,7 @@ map.itrabble.takeUntil(x => x.includes('e')).toMap()
 // => Map { 'a' => 'a', 'b' => 'b', 'c' => 'c', 'd' => 'd' }
 
 ```
+
+Thanks to [@wouterken](https://github.com/wouterken) for the interest and help with this!
+
 ...more to come
