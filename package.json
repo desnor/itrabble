@@ -1,6 +1,6 @@
 {
   "name": "itrabble",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Library to add useful methods to JavaScript iterables eg. Array, Map",
   "main": "index.js",
   "engines": {
