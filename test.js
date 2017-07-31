@@ -1,4 +1,5 @@
 const test = require('ava')
+const sinon = require('sinon')
 
 require('./itrabble')
 
@@ -86,6 +87,19 @@ test('skip', t => {
   const expectedResult = ['c','d']
 
   t.deepEqual([...arrayStrings.itrabble.skip(2)], expectedResult)
+})
+
+test('forEach', t => {
+  const log = sinon.stub().returns(x => x)
+  const expectedResult = ['a','b','c','d']
+
+  t.deepEqual([...arrayStrings.itrabble.forEach(log)], expectedResult)
+
+  t.is(log.callCount, arrayStrings.length)
+  t.is(log.calledWith('a'), true)
+  t.is(log.calledWith('b'), true)
+  t.is(log.calledWith('c'), true)
+  t.is(log.calledWith('d'), true)
 })
 
 test('seq', t => {

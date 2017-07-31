@@ -28,6 +28,7 @@
   "devDependencies": {
     "ava": "^0.21.0",
     "coveralls": "^2.13.1",
-    "nyc": "^11.1.0"
+    "nyc": "^11.1.0",
+    "sinon": "^2.4.1"
   }
 }
