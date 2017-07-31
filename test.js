@@ -1,7 +1,7 @@
 const test = require('ava')
 const sinon = require('sinon')
 
-require('./itrabble')
+require('./index')
 
 const arrayStrings = ['a','b','c','d']
 const arrayNums = [1,2,3,4]
