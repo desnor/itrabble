@@ -1,6 +1,5 @@
-'use strict'
-
 /* eslint-disable no-constant-condition */
+/* eslint-disable no-empty */
 
 function Itrabble(context){
   if(!this || this.constructor !== Itrabble) return new Itrabble(context)
@@ -9,6 +8,7 @@ function Itrabble(context){
     for(let val of context) yield val
   }
 }
+
 Object.defineProperty(Object.prototype, 'itrabble', {
   get: function(){
     return Itrabble(this)
@@ -31,8 +31,9 @@ Itrabble.prototype.buildIterator = function(iteratorFunc){
 
 Itrabble.prototype.first = function(){
   return this.buildIterator(function*(){
-    for(const elm of this.take(1)){
+    for(const elm of this.context){
       yield elm
+      break
     }
   })
 }
@@ -67,10 +68,12 @@ Itrabble.prototype.takeWhile = function(callback){
   })
 }
 
-Itrabble.prototype.take = function(count){
+Itrabble.prototype.take = function(count, offset=0){
   return this.buildIterator(function*(){
+    let index = 0
     for(let elm of this.context){
-      if(count-- == 0) break
+      if(index++ < offset) continue;
+      if(count-- == 0) break;
       yield elm
     }
   })
@@ -116,12 +119,11 @@ Itrabble.prototype.forEach = function(callback) {
   })
 }
 
-Itrabble.prototype.every = function(n, offset=0) {
+Itrabble.prototype.seq = function(n, offset=0) {
   return this.buildIterator(function*(){
     let index = 0
     for(let elm of this.context){
-      if(index % n == offset)
-        yield elm
+      if(index % n == offset) yield elm
       index += 1
     }
   })
@@ -155,7 +157,7 @@ Itrabble.prototype.reject = function(callback) {
   })
 }
 
-Itrabble.prototype.reduce = function(memo, callback){
+Itrabble.prototype.reduce = function(callback, memo){
   return this.buildIterator(function*(){
     for(let elm of this.context){
       memo = callback(memo, elm)

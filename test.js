@@ -2,95 +2,151 @@ const test = require('ava')
 
 require('./itrabble')
 
-let arrayStrings = ['a','b','c','d']
-let arrayNums = [1,2,3,4]
+const arrayStrings = ['a','b','c','d']
+const arrayNums = [1,2,3,4]
+const mapStrings = new Map ([['a', 'A'],['b','B'],['c','C']])
+const mapNums = new Map([[1, 10],[2, 20],[3, 30],[4, 40]])
+
+test('toArray', t => {
+  const unwrapped = 'a'
+  const wrapped = Array.from('a')
+
+  t.deepEqual(...arrayStrings.itrabble.first(), unwrapped)
+  t.deepEqual(arrayStrings.itrabble.first().toArray(), wrapped)
+})
+
+test('toMap', t => {
+  const wrapped = new Map ([['a', 'A'],['b','B']])
+
+  t.deepEqual(new Map(mapStrings.itrabble.take(2)), wrapped)
+  t.deepEqual(mapStrings.itrabble.take(2).toMap(), wrapped)
+})
 
 test('first', t => {
-  const expectedResult = ['a']
+  const expectedResult = 'a'
 
-  t.deepEqual(arrayStrings.itrabble.first().toArray(), expectedResult)
+  t.deepEqual(...arrayStrings.itrabble.first(), expectedResult)
 })
 
 test('last', t => {
-  const expectedResult = ['d']
+  const expectedResult = 'd'
 
-  t.deepEqual(arrayStrings.itrabble.last().toArray(), expectedResult)
+  t.deepEqual(...arrayStrings.itrabble.last(), expectedResult)
 })
 
 test('takeUntil', t => {
   const expectedResult = ['a','b']
 
-  t.deepEqual(arrayStrings.itrabble.takeUntil(x => x === 'c').toArray(), expectedResult)
+  t.deepEqual(
+    [...arrayStrings.itrabble.takeUntil(x => x === 'c')],
+    expectedResult
+  )
 })
 
 test('takeWhile', t => {
   const expectedResult = [1,2,3]
 
-  t.deepEqual(arrayNums.itrabble.takeWhile(x => x < 4).toArray(), expectedResult)
+  t.deepEqual(
+    [...arrayNums.itrabble.takeWhile(x => x < 4)],
+    expectedResult
+  )
 })
 
 test('take', t => {
   const expectedResult = ['a','b']
 
-  t.deepEqual(arrayStrings.itrabble.take(2).toArray(), expectedResult)
+  t.deepEqual([...arrayStrings.itrabble.take(2)], expectedResult)
+})
+
+test('take with offset', t => {
+  const expectedResult = ['b','c']
+
+  t.deepEqual([...arrayStrings.itrabble.take(2, 1)], expectedResult)
 })
 
 test('skipUntil', t => {
   const expectedResult = ['c','d']
 
-  t.deepEqual(arrayStrings.itrabble.skipUntil(x => x === 'c').toArray(), expectedResult)
+  t.deepEqual(
+    [...arrayStrings.itrabble.skipUntil(x => x === 'c')],
+    expectedResult
+  )
 })
 
 test('skipWhile', t => {
   const expectedResult = [3,4]
 
-  t.deepEqual(arrayNums.itrabble.skipWhile(x => x < 3).toArray(), expectedResult)
+  t.deepEqual(
+    [...arrayNums.itrabble.skipWhile(x => x < 3)],
+    expectedResult
+  )
 })
 
 test('skip', t => {
   const expectedResult = ['c','d']
 
-  t.deepEqual(arrayStrings.itrabble.skip(2).toArray(), expectedResult)
+  t.deepEqual([...arrayStrings.itrabble.skip(2)], expectedResult)
 })
 
-test('every', t => {
+test('seq', t => {
   const expectedResult = ['a','c']
 
-  t.deepEqual(arrayStrings.itrabble.every(2).toArray(), expectedResult)
+  t.deepEqual([...arrayStrings.itrabble.seq(2)], expectedResult)
 })
 
-test('every with offset', t => {
+test('seq with offset', t => {
   const expectedResult = ['b','d']
 
-  t.deepEqual(arrayStrings.itrabble.every(2, 1).toArray(), expectedResult)
+  t.deepEqual([...arrayStrings.itrabble.seq(2, 1)], expectedResult)
 })
 
 test('map', t => {
-  const expectedResult = [3,6,9,12]
+  const expectedArrayResult = [3,6,9,12]
+  const expectedMapResult = [10,40,90,160]
 
-  t.deepEqual(arrayNums.itrabble.map(x => x * 3).toArray(), expectedResult)
+  t.deepEqual([...arrayNums.itrabble.map(x => x * 3)], expectedArrayResult)
+  t.deepEqual([...mapNums.itrabble.map(([k, v]) => k * v)], expectedMapResult)
 })
 
 test('filter', t => {
   const expectedResult = [1,2,3]
 
-  t.deepEqual(arrayNums.itrabble.filter(x => x < 4).toArray(), expectedResult)
+  t.deepEqual([...arrayNums.itrabble.filter(x => x < 4)], expectedResult)
 })
 
 test('reject', t => {
   const expectedResult = [3,4]
 
-  t.deepEqual(arrayNums.itrabble.reject(x => x < 3).toArray(), expectedResult)
+  t.deepEqual([...arrayNums.itrabble.reject(x => x < 3)], expectedResult)
 })
 
 test('reduce', t => {
   const expectedResult = [10]
 
-  t.deepEqual(arrayNums.itrabble.reduce(0, (acc, x) => acc + x).toArray(), expectedResult)
+  t.deepEqual(
+    [...arrayNums.itrabble.reduce((acc, x) => acc + x, 0)],
+    expectedResult
+  )
 })
 
 test('zip', t => {
-  const expectedResult = ['a',1,'b',2,'c',3,'d',4]
+  const expectedResult = [['a',1],['b',2],['c',3],['d',4]]
+  t.deepEqual(
+    [...arrayStrings.itrabble.zip(arrayNums)],
+    expectedResult
+  )
+})
 
-  t.deepEqual(arrayStrings.itrabble.zip(arrayNums), expectedResult)
+test('zipWith', t => {
+  const simpleResult = ['a1','b2','c3','d4']
+  const complexResult = ['a-2-1-10','b-4-2-20','c-6-3-30','d-8-4-40']
+
+  t.deepEqual(
+    [...arrayStrings.itrabble.zipWith((str,num) => str + num, arrayNums)],
+    simpleResult
+  )
+  t.deepEqual(
+    [...arrayStrings.itrabble.zipWith((str, num, [ones, tens]) => `${str}-${num * 2}-${ones}-${tens}`, arrayNums, mapNums)],
+    complexResult
+  )
 })
