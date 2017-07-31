@@ -1,14 +1,17 @@
 {
   "name": "itrabble",
   "version": "0.0.1",
-  "description": "Library to add useful methods to iterables eg. Array, Map",
+  "description": "Library to add useful methods to JavaScript iterables eg. Array, Map",
   "main": "index.js",
+  "engines": {
+    "node": ">=6.11.1"
+  },
   "scripts": {
-    "test": "echo 'Error, no test supplied' && exit 0"
+    "test": "ava"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alexrevell/itrabble.git"
+    "url": "git+https://github.com/desnor/itrabble.git"
   },
   "keywords": [
     "iterables",
@@ -17,7 +20,10 @@
   "author": "Alex Revell <revellalex@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/alexrevell/itrabble/issues"
+    "url": "https://github.com/desnor/itrabble/issues"
   },
-  "homepage": "https://github.com/alexrevell/itrabble#readme"
+  "homepage": "https://github.com/desnor/itrabble#readme",
+  "devDependencies": {
+    "ava": "^0.21.0"
+  }
 }
