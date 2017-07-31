@@ -7,6 +7,7 @@
     "node": ">=6.11.1"
   },
   "scripts": {
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
     "test": "nyc ava",
     "test:watch": "ava -w"
   },

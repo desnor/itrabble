@@ -1,5 +1,7 @@
 # itrabble
 
+[![Coverage Status](https://coveralls.io/repos/github/desnor/itrabble/badge.svg?branch=master)](https://coveralls.io/github/desnor/itrabble?branch=master)
+
 ## Library to extend JS iterables
 
 ### Examples:
