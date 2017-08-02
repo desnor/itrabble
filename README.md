@@ -166,7 +166,7 @@ An ideal way to use this would be with the (somewhat) proposed bind operator `::
 import take from 'itrabble/lib/take'
 
 const array = ['a','b','c']
-const firstLetter = array::take(2)
+const firstTwo = array::take(2)
 // => iterable sequence { a b }
 ```
 
