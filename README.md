@@ -21,7 +21,7 @@ For a Node environment, you'll need a node version of at least 6.11.1 because th
 
 For browser usage, you may need to use a transpiler like [Babel](https://babeljs.io/) to transform the code into a compatible syntax depending on exactly which browser and version you are targeting. Google Chrome at the time of publishing version 1.0.0 is 60, and it works as is.
 
-### Changes from v1.0.1 -> v1.1.1
+### Changes from v1.0.1 -> v1.1.0
 
 [See here](#v111)
 
@@ -41,7 +41,7 @@ const map = new Map([['a','A'],['b','B'], ['c','C'],['d','D'],['e','E'],['f','F'
 
 const string = 'test string'
 ```
-As of `v1.1.1` there are now three ways to use the library.
+As of `v1.1.0` there are now three ways to use the library.
 
 ##### Standard Usage
 
@@ -130,7 +130,7 @@ itrabble(array).takeUntil(x => x === 'e').toSet()
 // => Set { 'a', 'b', 'c', 'd' }
 ```
 
-### v1.1.1
+### v1.1.0
 
 The main way of using the module hasn't changed, for example:
 ```js
