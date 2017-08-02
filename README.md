@@ -156,7 +156,9 @@ array.itrabble.skipUntil(x => x === 'd')
 
 As the name suggests more clearly now, this does modify the Object prototype. It's unlikely that the property `itrabble` will clash with any existing namespace, but it's good to be aware of what this is doing if you are going to use it.
 
-As I'd alluded to in the previous version, `itrabble` now provides a way to access the individual methods as separate exports which can be imported on a per-use basis, unattached to the rest of the `itrabble` module.
+#### Individual Exports
+
+`itrabble` now provides a way to access the individual methods as separate exports which can be imported on a per-use basis, unattached to the rest of the `itrabble` module.
 
 An ideal way to use this would be with the (somewhat) proposed bind operator `::`. The [proposal is on Github](https://github.com/tc39/proposal-bind-operator), and there is a [Babel transform for this](https://babeljs.io/docs/plugins/transform-function-bind/) which describes the idea well. It hasn't progressed past stage 0 and seems to have lost momentum, so while it's probably not appropriate for production code I really like it. For example:
 
@@ -167,6 +169,8 @@ const array = ['a','b','c']
 const firstLetter = array::take(2)
 // => iterable sequence { a b }
 ```
+
+---
 
 ### Acknowledgements
 
