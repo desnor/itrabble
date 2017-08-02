@@ -1,7 +1,7 @@
 {
   "name": "itrabble",
   "version": "1.0.1",
-  "description": "Library to add useful methods to JavaScript iterables eg. Array, Map",
+  "description": "Library to add useful methods to JavaScript iterables eg. Array, Map, Set, String, TypedArray",
   "main": "index.js",
   "engines": {
     "node": ">=6.11.1"
@@ -17,7 +17,12 @@
   },
   "keywords": [
     "iterables",
-    "ES6"
+    "ES6",
+    "lazy",
+    "streams",
+    "generator",
+    "iterator",
+    "ES2015"
   ],
   "author": "Alex Revell <revellalex@gmail.com>",
   "license": "MIT",

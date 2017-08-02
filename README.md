@@ -9,7 +9,7 @@
 
 ### Why?
 
-I know there are lots of other libraries that already do this kind of thing, and do it very well, extending ordinary JavaScript objects to be able to enjoy the breadth of functionality of say, a Ruby standard library object. For example Lodash.
+I know there are lots of other libraries that already do this kind of thing, and do it very well, extending ordinary JavaScript objects to be able to enjoy the breadth of functionality of say, a Ruby standard library object. For example [Lodash](https://lodash.com/).
 
 The twist that interested me was to be able to incorporate the recent additions to the JavaScript language that make it possible to iterate through infinite sequences, evaluated lazily, with a handy range of methods.
 
@@ -22,6 +22,8 @@ For a Node environment, you'll need a node version of at least 6.11.1 because th
 For browser usage, you may need to use a transpiler like Babel depending on exactly which browser and version you are targeting. My version of Chrome at the time of publishing version 1.0.0 is 60, and it all works!
 
 ### Usage
+
+install with [npm](https://www.npmjs.com/):
 
 `npm install --save itrabble`
 
@@ -133,3 +135,14 @@ to run tests in watch mode
 
 or for a coverage report
 `npm test`
+
+### Related
+
+You might find these related libraries interesting
+
+[Lodash](https://lodash.com)
+
+
+### License
+
+MIT © [Alex Revell](https://github.com/desnor)

@@ -1,7 +1,7 @@
 const test = require('ava')
 const sinon = require('sinon')
 
-require('./index')
+require('./lib/object-prototype-decorator')
 
 const arrayStrings = ['a','b','c','d']
 const arrayNums = [1,2,3,4]
@@ -18,9 +18,16 @@ test('toArray', t => {
 
 test('toMap', t => {
   const wrapped = new Map ([['a', 'A'],['b','B']])
-
   t.deepEqual(new Map(mapStrings.itrabble.take(2)), wrapped)
   t.deepEqual(mapStrings.itrabble.take(2).toMap(), wrapped)
+  t.deepEqual(mapStrings.itrabble.toMap(map => map.take(2)), wrapped)
+})
+
+test('toSet', t => {
+  const set = new Set(arrayStrings)
+
+  t.deepEqual(new Set(arrayStrings.itrabble), set)
+  t.deepEqual(arrayStrings.itrabble.toSet(), set)
 })
 
 test('first', t => {
