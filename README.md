@@ -23,7 +23,7 @@ For browser usage, you may need to use a transpiler like [Babel](https://babeljs
 
 ### Changes from v1.0.1 -> v1.1.0
 
-[See here](#v111)
+[See here](#v110)
 
 ### Usage
 
