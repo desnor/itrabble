@@ -195,8 +195,9 @@ or for a coverage report
 
 ### Related
 
-You might find these related libraries interesting
+You might find these related libraries & blog posts interesting
 
+[Dr Axel Rauschmayer explains ES6 iteration](http://2ality.com/2015/02/es6-iteration.html)
 [Lodash](https://lodash.com)
 
 ### License
