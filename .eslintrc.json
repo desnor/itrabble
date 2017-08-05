@@ -28,6 +28,7 @@
     "linebreak-style": ["error","unix"],
     "quotes": ["error","single"],
     "strict" : 0,
-    "no-console": "off"
+    "no-console": 2,
+    "prefer-const": ["error", {"destructuring": "all"}]
   }
 }
