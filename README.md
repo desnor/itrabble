@@ -178,7 +178,11 @@ Thanks to [@wouterken](https://github.com/wouterken) for the interest and help w
 
 ### Contributing
 
-This project is open to contributions, and pull requests are most welcome. Please open an issue to point out anything broken, lacking or otherwise worth mentioning.
+This project is open to contributions. Please read the [Code of Conduct](CODE_OF_CONDUCT.md) before doing anything else.
+
+Please [open an issue](https://github.com/desnor/itrabble/issues/new) to point out anything broken, lacking or otherwise worth mentioning.
+
+For development:
 
 fork and clone the repo
 
