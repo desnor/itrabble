@@ -7,7 +7,7 @@
 
 ## Library to extend JavaScript ES6 iterables
 
-### [Examples](#examples)
+### [Examples](#examples-1)
 ### [API Documentation](docs/index.html)
 
 ### Why?
