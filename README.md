@@ -7,6 +7,9 @@
 
 ## Library to extend JavaScript ES6 iterables
 
+### [Examples](#examples)
+### [API Documentation](docs/index.html)
+
 ### Why?
 
 I know there are lots of other libraries that already do this kind of thing, and do it very well, providing the ability to extend ordinary JavaScript objects to be able to enjoy the breadth of functionality of say, a Ruby standard library object. For example [Lodash](https://lodash.com/).
