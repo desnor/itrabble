@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>itrabble</h1><p><a href="https://coveralls.io/github/desnor/itrabble?branch=master"><img src="https://coveralls.io/repos/github/desnor/itrabble/badge.svg?branch=master" alt="Coverage Status"></a>
+<a href="https://travis-ci.org/desnor/itrabble"><img src="https://travis-ci.org/desnor/itrabble.svg?branch=master" alt="Build Status"></a></p>
+<p><a href="https://npmjs.org/package/itrabble"><img src="https://nodei.co/npm/itrabble.png" alt="NPM"></a></p>
+<h2>Library to extend JavaScript ES6 iterables</h2><h3><a href="#examples-1">Examples</a></h3><h3><a href="docs/index.html">API Documentation</a></h3><h3>Why?</h3><p>I know there are lots of other libraries that already do this kind of thing, and do it very well, providing the ability to extend ordinary JavaScript objects to be able to enjoy the breadth of functionality of say, a Ruby standard library object. For example <a href="https://lodash.com/">Lodash</a>.</p>
+<p>The twist that interested me was to be able to incorporate the recent additions to the JavaScript language that make it possible to iterate through infinite sequences, evaluated lazily, with a handy range of methods. Plus having these methods work in a uniform way regardless of whether the source is an Array, a Map, a Set, a String or some form of TypedArray or stream. Or even a user-created object that has its own unique behaviour.</p>
+<p>I wrote this mainly as a fun exercise for myself and a way to learn about the ES2015 features in more depth. I plan to add more utility functions as I see the need/think of them, or if people using the module request them.</p>
+<h3>Requirements</h3><p>For a Node environment, you'll need a node version of at least 6.11.1 because this library uses a large number of the features introduced in ES2015 (iterators, generator functions, and rest/spread operators to name a few).</p>
+<p>For browser usage, you may need to use a transpiler like <a href="https://babeljs.io/">Babel</a> to transform the code into a compatible syntax depending on exactly which browser and version you are targeting. Google Chrome at the time of publishing version 1.0.0 is 60, and it works as is.</p>
+<h3>Changes from v1.0.1 -&gt; v1.1.0</h3><p><a href="#v110">See here</a></p>
+<h3>Usage</h3><p>install with <a href="https://www.npmjs.com/">npm</a>:</p>
+<p><code>npm install --save itrabble</code></p>
+<h3>Examples</h3><pre class="prettyprint source lang-js"><code>// define some iterables
+const array = ['a','b','c','d','e','f']
+
+const map = new Map([['a','A'],['b','B'], ['c','C'],['d','D'],['e','E'],['f','F']])
+
+const string = 'test string'</code></pre><p>As of <code>v1.1.0</code> there are now three ways to use the library.</p>
+<h5>Standard Usage</h5><p>The easiest way is to use the imported module as a function to wrap the iterable object you wish to extend:</p>
+<pre class="prettyprint source lang-js"><code>const itrabble = require('itrabble')
+
+itrabble(array).skipUntil(x => x === 'd')
+//  => iterable sequence { d e f }</code></pre><h5>Alternative Usage</h5><p>Another way is to import the <code>object-prototype-decorator</code> nested module into scope and then call the <code>itrabble</code> property on any entity that has the following:</p>
+<ul>
+<li><code>Object</code> in its prototype</li>
+<li>The <code>Symbol.iterator</code> property  </li>
+</ul>
+<p>In the previous version <code>v1.0.1</code> this happened by default. It is now opt-in.</p>
+<p>As the name suggests, this does modify the Object prototype. It's unlikely that the property <code>itrabble</code> will clash with any existing namespace, but it's good to be aware of what this is doing if you are going to use it.</p>
+<pre class="prettyprint source lang-js"><code>require('itrabble/lib/object-prototype-decorator')
+
+/* Array */
+array.itrabble.skipUntil(x => x === 'd')
+//  => iterable sequence { d e f }
+
+/* Map */
+map.itrabble.takeUntil(x => x.includes('e'))
+//  => iterable sequence { [ 'a', 'A' ] [ 'b', 'B' ] [ 'c', 'C' ] [ 'd', 'D' ] }
+
+/* String */
+string.itrabble.takeUntil(x => x === 'i')
+//  => iterable sequence { test str }
+
+// All together now
+array.itrabble.zip( array, map, string ).take(3)
+/* => iterable sequence {
+ *  [ 'a', 'a', [ 'a', 'A' ], 't' ] [ 'b', 'b', [ 'b', 'B' ], 'e' ] [ 'c', 'c', [ 'c', 'C' ], 's' ]
+ * }
+*/</code></pre><p>The methods called on an instance of <code>itrabble</code> return an <code>itrabble</code> iterator over the updated sequence, which means they can be chained.</p>
+<pre class="prettyprint source lang-js"><code>itrabble(array).skipUntil(x => x === 'd').first() // or array.itrabble.skipUntil(x => x === 'd').first()
+// => iterable sequence { d e f } => iterable sequence { d }</code></pre><p>In order to consume the actual values of the returned iterator, you can use one of the following standard ES2015 calls:</p>
+<pre class="prettyprint source lang-js"><code>const skipped = itrabble(array).skipUntil(x => x === 'd')
+
+// ... operator
+console.log(...skipped)
+//  => d e f
+
+// for of loop
+for (let value of skipped){
+  console.log(value)
+}
+/*
+ * => d
+ * => e
+ * => f
+*/</code></pre><p>or alternatively specify the format with the following methods:</p>
+<pre class="prettyprint source lang-js"><code>/* Array */
+itrabble(array).takeUntil(x => x === 'e').toArray()
+// => ['a','b','c','d']
+
+/* Map */
+itrabble(map).takeUntil(x => x.includes('e')).toMap()
+// => Map { 'a' => 'a', 'b' => 'b', 'c' => 'c', 'd' => 'd' }
+
+/* Set */
+itrabble(array).takeUntil(x => x === 'e').toSet()
+// => Set { 'a', 'b', 'c', 'd' }</code></pre><h3>v1.1.0</h3><p>The main way of using the module hasn't changed, for example:</p>
+<pre class="prettyprint source lang-js"><code>const itrabble = require('itrabble')
+
+itrabble(array).skipUntil(x => x === 'd')
+//  => iterable sequence { d e f }</code></pre><p>However if you were previously using the following syntax:</p>
+<pre class="prettyprint source lang-js"><code>require('itrabble')
+
+array.itrabble.skipUntil(x => x === 'd')</code></pre><p>This has been updated to:</p>
+<pre class="prettyprint source lang-js"><code>require('itrabble/lib/object-prototype-decorator')
+
+array.itrabble.skipUntil(x => x === 'd')</code></pre><p>As the name suggests more clearly now, this does modify the Object prototype. It's unlikely that the property <code>itrabble</code> will clash with any existing namespace, but it's good to be aware of what this is doing if you are going to use it.</p>
+<h4>Individual Exports</h4><p><code>itrabble</code> now provides a way to access the individual methods as separate exports which can be imported on a per-use basis, unattached to the rest of the <code>itrabble</code> module.</p>
+<p>An ideal way to use this would be with the (somewhat) proposed bind operator <code>::</code>. The <a href="https://github.com/tc39/proposal-bind-operator">proposal is on Github</a>, and there is a <a href="https://babeljs.io/docs/plugins/transform-function-bind/">Babel transform for this</a> which describes the idea well. It hasn't progressed past stage 0 and seems to have lost momentum, so while it's probably not appropriate for production code I really like it. For example:</p>
+<pre class="prettyprint source lang-js"><code>import take from 'itrabble/lib/take'
+
+const array = ['a','b','c']
+const firstTwo = array::take(2)
+// => iterable sequence { a b }</code></pre><hr>
+<h3>Acknowledgements</h3><p>Thanks to <a href="https://github.com/wouterken">@wouterken</a> for the interest and help with this!</p>
+<h3>Contributing</h3><p>This project is open to contributions. Please read the <a href="CODE_OF_CONDUCT.md">Code of Conduct</a> before doing anything else.</p>
+<p>Please <a href="https://github.com/desnor/itrabble/issues/new">open an issue</a> to point out anything broken, lacking or otherwise worth mentioning.</p>
+<p>For development:</p>
+<p>fork and clone the repo</p>
+<p>Given the minimum required version of Node of <code>6.11.1</code> there's not a lot to set up to get going.</p>
+<p>install dependencies
+<code>npm install</code></p>
+<p>to run tests in watch mode
+<code>npm run test:watch</code></p>
+<p>or for a coverage report
+<code>npm test</code></p>
+<h3>Related</h3><p>You might find these related libraries &amp; blog posts interesting</p>
+<p><a href="http://2ality.com/2015/02/es6-iteration.html">Dr Axel Rauschmayer explains ES6 iteration</a></p>
+<p><a href="https://lodash.com">Lodash</a></p>
+<h3>License</h3><p>MIT © <a href="https://github.com/desnor">Alex Revell</a></p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#binaryCallback">binaryCallback</a></li><li><a href="global.html#filter">filter</a></li><li><a href="global.html#first">first</a></li><li><a href="global.html#forEach">forEach</a></li><li><a href="global.html#formatFn">formatFn</a></li><li><a href="global.html#last">last</a></li><li><a href="global.html#map">map</a></li><li><a href="global.html#predicateFnBinary">predicateFnBinary</a></li><li><a href="global.html#predicateFnUnary">predicateFnUnary</a></li><li><a href="global.html#reduce">reduce</a></li><li><a href="global.html#reject">reject</a></li><li><a href="global.html#seq">seq</a></li><li><a href="global.html#skip">skip</a></li><li><a href="global.html#skipUntil">skipUntil</a></li><li><a href="global.html#skipWhile">skipWhile</a></li><li><a href="global.html#take">take</a></li><li><a href="global.html#takeUntil">takeUntil</a></li><li><a href="global.html#takeWhile">takeWhile</a></li><li><a href="global.html#toArray">toArray</a></li><li><a href="global.html#toMap">toMap</a></li><li><a href="global.html#toSet">toSet</a></li><li><a href="global.html#variadicCallback">variadicCallback</a></li><li><a href="global.html#zip">zip</a></li><li><a href="global.html#zipWith">zipWith</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.4</a> on Sat Aug 12 2017 11:54:57 GMT+1200 (NZST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
