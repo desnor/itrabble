@@ -158,6 +158,15 @@ test('zip', t => {
   )
 })
 
+test('zipAll', t => {
+  const expectedResult = [['a',1],['b',2],['c',3],['d', 4],['e', undefined]]
+
+  t.deepEqual(
+    [...arrayStrings.concat('e').itrabble.zipAll(arrayNums)],
+    expectedResult
+  )
+})
+
 test('zipWith', t => {
   const simpleResult = ['a1','b2','c3','d4']
   const complexResult = ['a-2-1-10','b-4-2-20','c-6-3-30','d-8-4-40']
