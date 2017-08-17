@@ -109,6 +109,41 @@ test('forEach', t => {
   t.is(log.calledWith('d'), true)
 })
 
+/* ***** eachChunk/ ***** */
+test('eachChunk with even n chunks', t => {
+  const log = sinon.stub().returns(x => x)
+  const expectedResult = ['a','b','c','d']
+
+  t.deepEqual([...arrayStrings.itrabble.eachChunk(2, log)], expectedResult)
+
+  t.is(log.callCount, 2)
+  t.is(log.calledWith('a','b'), true)
+  t.is(log.calledWith('c','d'), true)
+})
+
+test('eachChunk with odd n chunks', t => {
+  const log = sinon.stub().returns(x => x)
+  const expectedResult = ['a','b','c','d']
+  const oddChunks = 3
+
+  t.deepEqual([...arrayStrings.itrabble.eachChunk(oddChunks, log)], expectedResult)
+
+  t.is(log.callCount, 2)
+  t.is(log.calledWith('a','b','c'), true)
+  t.is(log.calledWith('d'), true)
+})
+
+test('eachChunk with illegal chunk size throws error', t => {
+  const log = sinon.stub().returns(x => x)
+  const n = -1
+  const expectedError = `Chunk size must be at least 1: ${n} given`
+
+  const error = t.throws(() => [...arrayStrings.itrabble.eachChunk(n, log)], RangeError)
+
+  t.is(error.message, expectedError)
+})
+/* ***** /eachChunk ***** */
+
 test('seq', t => {
   const expectedResult = ['a','c']
 
