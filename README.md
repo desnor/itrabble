@@ -5,10 +5,12 @@
 
 [![NPM](https://nodei.co/npm/itrabble.png)](https://npmjs.org/package/itrabble)
 
+[![NPM](https://img.shields.io/npm/dt/express.svg)](https://www.npmjs.com/package/itrabble)
+
 ## Library to extend JavaScript ES6 iterables
 
 ### [Examples](#examples-1)
-### [API Documentation](docs/index.html)
+### [API Documentation](wiki)
 
 ### Why?
 
