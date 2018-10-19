@@ -142,7 +142,6 @@ test('eachChunk with illegal chunk size throws error', t => {
 
   t.is(error.message, expectedError)
 })
-/* ***** /eachChunk ***** */
 
 test('seq', t => {
   const expectedResult = ['a','c']
@@ -181,6 +180,15 @@ test('reduce', t => {
 
   t.deepEqual(
     [...arrayNums.itrabble.reduce((acc, x) => acc + x, 0)],
+    expectedResult
+  )
+})
+
+test('scan', t => {
+  const expectedResult = [1,3,6,10]
+
+  t.deepEqual(
+    [...arrayNums.itrabble.scan((acc, x) => acc + x, 0)],
     expectedResult
   )
 })
