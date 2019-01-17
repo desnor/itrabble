@@ -10,7 +10,7 @@
 ## Library to extend JavaScript ES6 iterables
 
 ### [Examples](#examples-1)
-### [API Documentation](wiki)
+### [API Documentation](https://github.com/desnor/itrabble/wiki)
 
 ### Why?
 
@@ -77,7 +77,7 @@ array.itrabble.skipUntil(x => x === 'd')
 //  => iterable sequence { d e f }
 
 /* Map */
-map.itrabble.takeUntil(x => x.includes('e'))
+map.itrabble.takeUntil(xs => xs.includes('e'))
 //  => iterable sequence { [ 'a', 'A' ] [ 'b', 'B' ] [ 'c', 'C' ] [ 'd', 'D' ] }
 
 /* String */
@@ -116,6 +116,14 @@ for (let value of skipped){
  * => d
  * => e
  * => f
+*/
+
+// selected iteration through destructuring
+const [ d, e, f ] = skipped
+/*
+  console.log(d) => d
+  console.log(e) => e
+  console.log(f) => f
 */
 ```
 
@@ -207,7 +215,7 @@ or for a coverage report
 You might find these related libraries & blog posts interesting
 
 [Dr Axel Rauschmayer explains ES6 iteration](http://2ality.com/2015/02/es6-iteration.html)
-
+[IXJS - Interactive Extensions for JavaScript](https://github.com/ReactiveX/IxJS)
 [Lodash](https://lodash.com)
 
 ### License
