@@ -21,7 +21,6 @@
     "expect": true,
     "jest": true
   },
-  "extends": ["eslint:recommended"],
   "rules": {
     "indent": ["error", 2],
     "comma-dangle": ["error", "only-multiline"],
