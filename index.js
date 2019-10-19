@@ -1,3 +1,3 @@
-const Itrabble = require('./lib')
+import Itrabble from './lib'
 
-module.exports = Itrabble
+export default Itrabble

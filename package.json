@@ -2,7 +2,8 @@
   "name": "itrabble",
   "version": "1.1.1",
   "description": "Library to add useful methods to JavaScript iterables eg. Array, Map, Set, String, TypedArray",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "module": "index.js",
   "engines": {
     "node": ">=6.11.1"
   },
@@ -35,6 +36,7 @@
     "ava": "^0.21.0",
     "coveralls": "^2.13.3",
     "nyc": "^11.9.0",
+    "rollup": "^1.25.0",
     "sinon": "^2.4.1"
   }
 }
