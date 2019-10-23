@@ -1,14 +1,11 @@
-const it = require('./')
-const map = require('./lib/pipeable/map')
-const filter = require('./lib/pipeable/filter')
-const first = require('./lib/pipeable/first')
-const toArray = require('./lib/pipeable/first')
+const it = require('./dist/index')
+const { map, filter, first, toArray } = require('./dist')
 
 const timeArray = (length) => {
     console.time(`array ${length}`);
     const res = Array.from({ length }, (_, i) => i)
         .map(x =>  x ** x )
-        .filter(x => x % 3 === 0)[0];
+        .find(x => x % 3 === 0)
     console.timeEnd(`array ${length}`);
     return res
 }
@@ -44,7 +41,7 @@ const timePipeItrabble = (length) => {
     return res
 }
 
-const n = 10000000
+const n = 1000000
 
 timeArray(n)
 timeItrabble(n)
