@@ -1,16 +1,17 @@
 import compiler from '@ampproject/rollup-plugin-closure-compiler'
 import multiEntry from 'rollup-plugin-multi-entry'
+import pkg from './package.json'
 
 export default {
   input: ['lib/index.js', 'lib/pipeable/*.js'],
   output: [{
-    file: 'dist/index.js',
+    file: pkg.main,
     format: 'cjs',
   }, {
-    file: 'dist/index.es.js',
+    file: pkg.module,
     format: 'es',
   }, {
-    file: 'dist/index.umd.js',
+    file: pkg.browser,
     format: 'umd',
     name: 'Itrabble',
   }],

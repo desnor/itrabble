@@ -1,7 +1,7 @@
-const test = require('ava')
-const sinon = require('sinon')
+import test from 'ava'
+import sinon from 'sinon'
 
-require('./lib/object-prototype-decorator')
+import './lib/object-prototype-decorator'
 
 const arrayStrings = ['a','b','c','d']
 const arrayNums = [1,2,3,4]
