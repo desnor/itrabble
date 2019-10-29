@@ -59,5 +59,6 @@ typings/
 
 # bundled outputs
 dist/
-commonjs/
+commonjs/index.js
+commonjs/pipeable/
 esm/
