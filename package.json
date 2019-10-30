@@ -3,8 +3,8 @@
   "version": "1.1.1",
   "description": "Library to add useful methods to JavaScript iterables eg. Array, Map, Set, String, TypedArray",
   "browser": "dist/index.umd.js",
-  "main": "commonjs/",
-  "module": "esm/",
+  "main": "commonjs/index.js",
+  "module": "esm/index.js",
   "exports": {
     ".": "./esm/index.js",
     "./pipeable": "./esm/pipeable/index.js"
@@ -16,7 +16,7 @@
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "build": "rollup -c",
-    "test": "nyc ava",
+    "test": "nyc ava test",
     "test:watch": "ava -w",
     "generate-docs": "jsdoc lib README.md -d docs"
   },
@@ -47,5 +47,6 @@
     "rollup": "^1.25.0",
     "rollup-plugin-multi-entry": "^2.1.0",
     "sinon": "^2.4.1"
-  }
+  },
+  "dependencies": {}
 }
