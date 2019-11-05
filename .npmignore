@@ -1,5 +1,5 @@
 test/
-lib/
+esm/
 .nyc_output/
 test-script.js
 .nvmrc

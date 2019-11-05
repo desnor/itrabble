@@ -4,10 +4,10 @@
   "description": "Library to add useful methods to JavaScript iterables eg. Array, Map, Set, String, TypedArray",
   "browser": "dist/index.umd.js",
   "main": "commonjs/index.js",
-  "module": "esm/index.js",
+  "module": "lib/index.js",
   "exports": {
-    ".": "./esm/index.js",
-    "./pipeable": "./esm/pipeable/index.js"
+    ".": "./lib/index.js",
+    "./pipeable/": "./lib/pipeable/"
   },
   "type": "module",
   "engines": {
