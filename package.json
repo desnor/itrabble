@@ -7,7 +7,7 @@
   "module": "lib/index.js",
   "exports": {
     ".": "./lib/index.js",
-    "./pipeable/": "./lib/pipeable/"
+    "./pipeable": "./lib/pipeable/index.js"
   },
   "type": "module",
   "engines": {
@@ -16,6 +16,7 @@
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "build": "rollup -c",
+    "prepublishOnly": "rollup -c && npm t",
     "test": "nyc ava test",
     "test:watch": "ava -w",
     "generate-docs": "jsdoc lib README.md -d docs"

@@ -3,8 +3,8 @@ import multiEntry from 'rollup-plugin-multi-entry'
 import pkg from './package.json'
 
 export default [{
-    // umd browser build
-    input: ['lib/index.js', 'lib/pipeable/*.js'],
+    // minified umd browser build
+    input: ['lib/index.js', 'lib/pipeable/index.js'],
     output: {
       file: pkg.browser,
       format: 'umd',
@@ -15,31 +15,22 @@ export default [{
       compiler(),
     ]
   },
-  // pipeable build
+  // pipeable cjs build
   {
-    input: 'lib/pipeable/*.js',
+    input: 'lib/pipeable/index.js',
     output: [{
       file: 'commonjs/pipeable/index.js',
       format: 'cjs',
-    },{
-      file: 'esm/pipeable/index.js',
-      format: 'es'
     }],
     plugins: [
       multiEntry(),
     ]
   },
-  // main cjs and esm build
+  // main cjs build
   {
   input: ['lib/index.js'],
   output: [{
     file: pkg.main,
     format: 'cjs',
-  }, {
-    file: pkg.module,
-    format: 'es',
   }],
-  plugins: [
-    // compiler(),
-  ]
 }]
