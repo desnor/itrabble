@@ -1,6 +1,6 @@
 import test from 'ava'
 import sinon from 'sinon'
-import { from } from '../commonjs'
+import { from } from '../lib/index.js'
 
 const arrayStrings = ['a','b','c','d']
 const arrayNums = [1,2,3,4]

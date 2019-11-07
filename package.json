@@ -7,7 +7,7 @@
   "module": "lib/index.js",
   "exports": {
     ".": "./lib/index.js",
-    "./pipeable": "./lib/pipeable/index.js"
+    "./pipeable/": "./lib/pipeable/"
   },
   "type": "module",
   "engines": {
@@ -16,8 +16,9 @@
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "build": "rollup -c",
-    "prepublishOnly": "rollup -c && npm t",
-    "test": "nyc ava test",
+    "prepublish": "rollup -c && npm t",
+    "test": "ava test/*",
+    "test:coverage": "nyc ava test",
     "test:watch": "ava -w",
     "generate-docs": "jsdoc lib README.md -d docs"
   },
@@ -34,6 +35,9 @@
     "iterator",
     "ES2015"
   ],
+  "ava": {
+    "babel": false
+  },
   "author": "Alex Revell <revellalex@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -42,7 +46,7 @@
   "homepage": "https://github.com/desnor/itrabble#readme",
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.10.0",
-    "ava": "^0.21.0",
+    "ava": "^2.4.0",
     "coveralls": "^2.13.3",
     "nyc": "^11.9.0",
     "rollup": "^1.25.0",

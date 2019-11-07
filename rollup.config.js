@@ -21,10 +21,7 @@ export default [{
     output: [{
       file: 'commonjs/pipeable/index.js',
       format: 'cjs',
-    }],
-    plugins: [
-      multiEntry(),
-    ]
+    }]
   },
   // main cjs build
   {
