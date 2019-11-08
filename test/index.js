@@ -1,6 +1,6 @@
 import test from 'ava'
 import sinon from 'sinon'
-import { from } from '../lib/index.js'
+import { of, from } from '../lib/index.js'
 
 const arrayStrings = ['a','b','c','d']
 const arrayNums = [1,2,3,4]
@@ -11,6 +11,20 @@ const arrayStringsIt = from(arrayStrings)
 const arrayNumsIt = from(arrayNums)
 const mapStringsIt = from(mapStrings)
 const mapNumsIt = from(mapNums)
+
+test('from', t => {
+  const itrabble = from([1,2,3])
+  const nums = [...itrabble.toArray()]
+
+  t.deepEqual(nums, [1,2,3])
+})
+
+test('of', t => {
+  const itrabble = of(1,2,3)
+  const nums = [...itrabble.toArray()]
+
+  t.deepEqual(nums, [1,2,3])
+})
 
 test('toArray', t => {
   const unwrapped = 'a'
