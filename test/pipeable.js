@@ -1,33 +1,34 @@
 import test from 'ava'
 import sinon from 'sinon'
 
-import { from } from '../commonjs'
-import { append } from '../commonjs/pipeable'
-import { concat } from '../commonjs/pipeable'
-import { first } from '../commonjs/pipeable'
-import { eachChunk } from '../commonjs/pipeable'
-import { filter } from '../commonjs/pipeable'
-import { forEach } from '../commonjs/pipeable'
-import { last } from '../commonjs/pipeable'
-import { map } from '../commonjs/pipeable'
-import { prepend } from '../commonjs/pipeable'
-import { reduce } from '../commonjs/pipeable'
-import { reject } from '../commonjs/pipeable'
-import { scan } from '../commonjs/pipeable'
-import { seq } from '../commonjs/pipeable'
-import { skip } from '../commonjs/pipeable'
-import { skipUntil } from '../commonjs/pipeable'
-import { skipWhile } from '../commonjs/pipeable'
-import { take } from '../commonjs/pipeable'
-import { takeUntil } from '../commonjs/pipeable'
-import { takeWhile } from '../commonjs/pipeable'
-import { zip } from '../commonjs/pipeable'
-import { zipAll } from '../commonjs/pipeable'
-import { zipWith } from '../commonjs/pipeable'
-
-import { toArray } from '../commonjs/pipeable'
-import { toMap } from '../commonjs/pipeable'
-import { toSet } from '../commonjs/pipeable'
+import { from } from '../lib'
+import {
+append,
+concat,
+first,
+eachChunk,
+filter,
+forEach,
+last,
+map,
+prepend,
+reduce,
+reject,
+scan,
+seq,
+skip,
+skipUntil,
+skipWhile,
+take,
+takeUntil,
+takeWhile,
+zip,
+zipAll,
+zipWith,
+toArray,
+toMap,
+toSet,
+} from '../lib/pipeable/index.js'
 
 const arrayStrings = ['a', 'b', 'c', 'd']
 const arrayNums = [1, 2, 3, 4]
