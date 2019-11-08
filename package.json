@@ -17,8 +17,7 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "build": "rollup -c",
     "prepublish": "rollup -c && npm t",
-    "test": "ava test/*",
-    "test:coverage": "nyc ava test",
+    "test": "nyc ava --verbose",
     "test:watch": "ava -w",
     "generate-docs": "jsdoc lib README.md -d docs"
   },
@@ -36,7 +35,9 @@
     "ES2015"
   ],
   "ava": {
-    "babel": false
+    "require": [
+      "esm"
+    ]
   },
   "author": "Alex Revell <revellalex@gmail.com>",
   "license": "MIT",
@@ -47,11 +48,12 @@
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.10.0",
     "ava": "^2.4.0",
-    "coveralls": "^2.13.3",
-    "nyc": "^11.9.0",
+    "coveralls": "^3.0.7",
+    "esm": "^3.2.25",
+    "nyc": "^14.1.1",
     "rollup": "^1.25.0",
     "rollup-plugin-multi-entry": "^2.1.0",
-    "sinon": "^2.4.1"
+    "sinon": "^7.5.0"
   },
   "dependencies": {}
 }
