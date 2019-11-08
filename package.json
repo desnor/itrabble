@@ -16,7 +16,7 @@
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "build": "rollup -c",
-    "prepublish": "rollup -c && npm t",
+    "prepublishOnly": "rollup -c && npm t",
     "test": "nyc ava",
     "test:watch": "ava -w",
     "generate-docs": "jsdoc lib README.md -d docs"
