@@ -1,0 +1,10 @@
+test/
+esm/
+.nyc_output/
+
+test-script.js
+rollup.config.js
+
+.nvmrc
+.eslintrc.json
+.travis.yml

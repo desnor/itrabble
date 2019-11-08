@@ -2,12 +2,21 @@
   "name": "itrabble",
   "version": "1.1.1",
   "description": "Library to add useful methods to JavaScript iterables eg. Array, Map, Set, String, TypedArray",
-  "main": "index.js",
+  "browser": "dist/index.umd.js",
+  "main": "commonjs/index.js",
+  "module": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./pipeable/": "./lib/pipeable/"
+  },
+  "type": "module",
   "engines": {
     "node": ">=6.11.1"
   },
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "build": "rollup -c",
+    "prepublish": "rollup -c && npm t",
     "test": "nyc ava",
     "test:watch": "ava -w",
     "generate-docs": "jsdoc lib README.md -d docs"
@@ -25,6 +34,11 @@
     "iterator",
     "ES2015"
   ],
+  "ava": {
+    "require": [
+      "esm"
+    ]
+  },
   "author": "Alex Revell <revellalex@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -32,9 +46,14 @@
   },
   "homepage": "https://github.com/desnor/itrabble#readme",
   "devDependencies": {
-    "ava": "^0.21.0",
-    "coveralls": "^2.13.3",
-    "nyc": "^11.9.0",
-    "sinon": "^2.4.1"
-  }
+    "@ampproject/rollup-plugin-closure-compiler": "^0.10.0",
+    "ava": "^2.4.0",
+    "coveralls": "^3.0.7",
+    "esm": "^3.2.25",
+    "nyc": "^14.1.1",
+    "rollup": "^1.25.0",
+    "rollup-plugin-multi-entry": "^2.1.0",
+    "sinon": "^7.5.0"
+  },
+  "dependencies": {}
 }
