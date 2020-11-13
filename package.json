@@ -7,7 +7,9 @@
   "module": "lib/index.js",
   "exports": {
     ".": "./lib/index.js",
-    "./pipeable/": "./lib/pipeable/"
+    "./pipeable/": "./lib/pipeable/",
+    "./commonjs": "./commonjs/index.js",
+    "./commonjs/pipeable": "./commonjs/pipeable/index.js"
   },
   "type": "module",
   "engines": {
