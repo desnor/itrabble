@@ -156,7 +156,7 @@ test('eachChunk with illegal chunk size throws error', t => {
   const n = -1
   const expectedError = `Chunk size must be at least 1: ${n} given`
 
-  const error = t.throws(() => [...arrayStringsIt.eachChunk(n, log)], RangeError)
+  const error = t.throws(() => [...arrayStringsIt.eachChunk(n, log)], {instanceOf: RangeError})
 
   t.is(error.message, expectedError)
 })

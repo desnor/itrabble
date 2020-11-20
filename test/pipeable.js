@@ -1,7 +1,7 @@
 import test from 'ava'
 import sinon from 'sinon'
 
-import { from } from '../lib'
+import { from } from '../lib/index.js'
 import {
 append,
 concat,
@@ -193,7 +193,7 @@ test('eachChunk with illegal chunk size throws error', t => {
   const expectedError = `Chunk size must be at least 1: ${n} given`
   const arrayStringsIt = from(arrayStrings)
 
-  const error = t.throws(() => [...arrayStringsIt.pipe(eachChunk(n, log))], RangeError)
+  const error = t.throws(() => [...arrayStringsIt.pipe(eachChunk(n, log))], { instanceOf: RangeError })
 
   t.is(error.message, expectedError)
 })
