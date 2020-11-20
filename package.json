@@ -7,7 +7,9 @@
   "module": "lib/index.js",
   "exports": {
     ".": "./lib/index.js",
-    "./pipeable/": "./lib/pipeable/"
+    "./pipeable/": "./lib/pipeable/",
+    "./commonjs": "./commonjs/index.js",
+    "./commonjs/pipeable": "./commonjs/pipeable/index.js"
   },
   "type": "module",
   "engines": {
@@ -35,8 +37,8 @@
     "ES2015"
   ],
   "ava": {
-    "require": [
-      "esm"
+    "nodeArguments": [
+      "--experimental-modules"
     ]
   },
   "author": "Alex Revell <revellalex@gmail.com>",
@@ -46,10 +48,9 @@
   },
   "homepage": "https://github.com/desnor/itrabble#readme",
   "devDependencies": {
-    "@ampproject/rollup-plugin-closure-compiler": "^0.10.0",
-    "ava": "^2.4.0",
+    "@ampproject/rollup-plugin-closure-compiler": "^0.26.0",
+    "ava": "^3.13.0",
     "coveralls": "^3.0.7",
-    "esm": "^3.2.25",
     "nyc": "^14.1.1",
     "rollup": "^1.25.0",
     "rollup-plugin-multi-entry": "^2.1.0",
