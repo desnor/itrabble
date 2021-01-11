@@ -51,6 +51,7 @@
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.26.0",
     "ava": "^3.13.0",
+    "benchmark": "^2.1.4",
     "coveralls": "^3.0.7",
     "nyc": "^14.1.1",
     "rollup": "^1.25.0",
