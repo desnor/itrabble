@@ -1,19 +1,23 @@
-type PredicateFunction<T, S extends T> = (value: T, index: number) => value is S;
+type PredicateFunction<T, S extends T> = (
+  value: T,
+  index: number
+) => value is S;
 type UnaryFunction<T, R> = (value: T) => R;
 type VariadicCallback<T> = (...values: T[]) => void;
 type BinaryCallback<T> = (value: T, index: number) => void;
-type Mappable<T> = T extends [infer K, infer V] ? [K, V] : never
-type IterableType<T> =
-  | Array<T>
-  | Set<T>
-  | Mappable<T>;
-type PipeableFunction<T, R = T, U extends Iterable = Generator> = (context: Iterable<T>) => U<R>;
+type Mappable<T> = T extends [infer K, infer V] ? [K, V] : never;
+type IterableType<T> = Array<T> | Set<T> | Mappable<T>;
+type PipeableFunction<T, R = T, U extends Iterable = Generator> = (
+  context: Iterable<T>
+) => U<R>;
+
+function isIterable<T>(value: any): value is Iterable<T>;
+function hasBeenInvoked<T>(pipeline: any): pipeline is IterableType<T>;
+function isObject<T>(value: any): value is Record<string, T>;
 
 declare class Itrabble<T> extends Iterable<T> {
   // [Symbol.iterator](): Iterable<T>;
-  pipe<A>(
-    fn1: PipeableFunction<T, A>
-  ): Itrabble<A>;
+  pipe<A>(fn1: PipeableFunction<T, A>): Itrabble<A>;
   pipe<A, B>(
     fn1: PipeableFunction<T, A>,
     fn2: PipeableFunction<A, B>
@@ -86,19 +90,28 @@ declare class Itrabble<T> extends Iterable<T> {
 
 declare module "itrabble" {
   export function of<T>(...args: T[]): Itrabble<T>;
-  export function from<T>(context: Iterable<T> | Record<string, T>): Itrabble<T>;
+  export function from<T>(
+    context: Iterable<T> | Record<string, T>
+  ): Itrabble<T>;
 }
 
 declare module "itrabble/commonjs" {
   export function of<T>(...args: T[]): Itrabble<T>;
-  export function from<T>(context: Iterable<T> | Record<string, T>): Itrabble<T>;
+  export function from<T>(
+    context: Iterable<T> | Record<string, T>
+  ): Itrabble<T>;
 }
 
 declare module "itrabble/pipeable" {
   export function append<T, U>(...args: U[]): PipeableFunction<T, T | U>;
   export function concat<T, U>(args: Iterable<U>): PipeableFunction<T, T | U>;
-  export function eachChunk<T>(n: number, callback: VariadicCallback<T>): PipeableFunction<T>;
-  export function filter<T, U>(fn: PredicateFunction<T, U>): PipeableFunction<T, U>;
+  export function eachChunk<T>(
+    n: number,
+    callback: VariadicCallback<T>
+  ): PipeableFunction<T>;
+  export function filter<T, U>(
+    fn: PredicateFunction<T, U>
+  ): PipeableFunction<T, U>;
   export function first<T>(): PipeableFunction<T>;
   export function forEach<T>(callback: BinaryCallback<T>): PipeableFunction<T>;
   export function last<T>(): PipeableFunction<T>;
