@@ -11,6 +11,8 @@ import {
  * @param {Iterable<any> | {}} source
  */
 export function from(source) {
+  if (source instanceof Itrabble) return source
+
   if (isIterable(source)) return new Itrabble(source)
 
   if (isObject(source)) return new Itrabble(Object.entries(source))

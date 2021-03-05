@@ -1,17 +1,11 @@
-/**
- * Function to format given context into a Map-friendly shape.
- * @function formatFn
- * @param {itrabble} this - itrabble context is applied to the format function.
- * @returns {iterable} result - an iterable that can be used to instantiate
- * a new Map.
- */
+import Itrabble from './itrabble';
+import { Mappable } from './util-types';
 
 /**
  * Converts iterable sequence into a Map, invoking any prior transforms.
  * Optional formatFn can be given to return a specific format for the Map.
  *
  * @function toMap
- * @param {formatFn} formatFn - optional function to format shape of
  * @returns {Map} - the iterated context invoked and formatted into a Map.
  *
  * @example <caption>an `itrabble` is an iterable over the given values</caption>
@@ -23,15 +17,13 @@
  * @example <caption>toMap when no formatFn given</caption>
  * itrabble([[1,2],[3,4],5]).take(2).toMap()
  * // => new Map { 1 => 2, 3 => 4 }
- * @example <caption>toMap passes context into a provided formatFn</caption>
- * itrabble([[1,2],[3,4],5]).toMap(itr => itr.take(2)).toMap()
- * // => new Map { 1 => 2, 3 => 4 }
  */
-function toMap(formatFn) {
-  if (formatFn != null) {
-    return new Map(formatFn(this))
-  }
-  return new Map(this)
+function toMap<T>(this: Itrabble<T>): Map<Mappable<T>[0], Mappable<T>[1]> {
+  return new Map(this);
 }
 
-export default toMap
+export default toMap;
+type Tuple = [string, number];
+
+const array: Tuple[] = [['a', 1]];
+new Itrabble(array).toMap();

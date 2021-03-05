@@ -2,27 +2,24 @@
   "name": "itrabble",
   "version": "2.0.0-rc.1",
   "description": "Library to add useful methods to JavaScript iterables eg. Array, Map, Set, String, TypedArray",
-  "browser": "dist/index.umd.js",
-  "main": "commonjs/index.js",
-  "module": "lib/index.js",
-  "exports": {
-    ".": "./lib/index.js",
-    "./pipeable/": "./lib/pipeable/",
-    "./commonjs": "./commonjs/index.js",
-    "./commonjs/pipeable": "./commonjs/pipeable/index.js"
-  },
-  "type": "module",
-  "types": "index.d.ts",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
   "engines": {
-    "node": ">=6.11.1"
+    "node": ">=10"
   },
   "scripts": {
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "build": "rollup -c",
-    "prepublishOnly": "rollup -c && npm t",
-    "test": "nyc ava",
-    "test:watch": "ava -w",
-    "generate-docs": "jsdoc lib README.md -d docs"
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -48,15 +45,44 @@
     "url": "https://github.com/desnor/itrabble/issues"
   },
   "homepage": "https://github.com/desnor/itrabble#readme",
+  "module": "dist/itrabble.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/itrabble.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/itrabble.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "peerDependencies": {},
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.26.0",
+    "@size-limit/preset-small-lib": "^4.9.2",
     "ava": "^3.13.0",
     "benchmark": "^2.1.4",
     "coveralls": "^3.0.7",
+    "husky": "^5.1.3",
     "nyc": "^14.1.1",
     "rollup": "^1.25.0",
     "rollup-plugin-multi-entry": "^2.1.0",
-    "sinon": "^7.5.0"
+    "sinon": "^7.5.0",
+    "size-limit": "^4.9.2",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.1.0",
+    "typescript": "^4.2.2"
   },
   "dependencies": {}
 }

@@ -1,22 +1,27 @@
-type PredicateFunction<T, S extends T> = (
-  value: T,
-  index: number
-) => value is S;
+type PredicateFunction<T, S extends T> = (value: T, index?: number) => boolean;
 type UnaryFunction<T, R> = (value: T) => R;
 type VariadicCallback<T> = (...values: T[]) => void;
 type BinaryCallback<T> = (value: T, index: number) => void;
 type Mappable<T> = T extends [infer K, infer V] ? [K, V] : never;
-type IterableType<T> = Array<T> | Set<T> | Mappable<T>;
-type PipeableFunction<T, R = T, U extends Iterable = Generator> = (
-  context: Iterable<T>
-) => U<R>;
+type MappableValue<T> = T extends Mappable<infer U> ? Map<U[0], U[1]> : never;
+type IterableType<T, M extends MappableValue<T> = MappableValue<T>> =
+  | Array<T>
+  | Set<T>
+  | M;
+type IterableTypeBase = Array<any> | Set<any> | Map<any, any>;
+type PipeableFunction<
+  T,
+  R = T,
+  U extends Iterable<R> | Generator<R> = Generator<R>
+> = (context: Iterable<T>) => U extends infer X ? X : U;
 
-function isIterable<T>(value: any): value is Iterable<T>;
-function hasBeenInvoked<T>(pipeline: any): pipeline is IterableType<T>;
-function isObject<T>(value: any): value is Record<string, T>;
+declare function isIterable<T>(value: any): value is Iterable<T>;
+declare function hasBeenInvoked<T>(pipeline: any): pipeline is IterableType<T>;
+declare function isObject<T>(value: any): value is Record<string, T>;
 
-declare class Itrabble<T> extends Iterable<T> {
-  // [Symbol.iterator](): Iterable<T>;
+declare class Itrabble<T> implements Iterable<T> {
+  new(context: Iterable<T>): Itrabble<T>;
+  [Symbol.iterator](): Iterator<T>;
   pipe<A>(fn1: PipeableFunction<T, A>): Itrabble<A>;
   pipe<A, B>(
     fn1: PipeableFunction<T, A>,
@@ -76,7 +81,7 @@ declare class Itrabble<T> extends Iterable<T> {
     fn6: PipeableFunction<E, F>,
     fn7: PipeableFunction<F, G>,
     fn8: PipeableFunction<G, H>,
-    fn8: PipeableFunction<H, I>
+    fn9: PipeableFunction<H, I>
   ): Itrabble<I>;
   // pipe<R>(
   //   ...functions: PipeableFunction<T, R>[]
@@ -85,21 +90,20 @@ declare class Itrabble<T> extends Iterable<T> {
   toMap<T>(): T extends Mappable<T> ? Map<T[0], T[1]> : never;
   toSet(): Set<T>;
   first(): Itrabble<T>;
+  filter<S extends T>(predicateFn: PredicateFunction<T, S>): Itrabble<S>;
   last(): Itrabble<T>;
 }
 
 declare module "itrabble" {
   export function of<T>(...args: T[]): Itrabble<T>;
-  export function from<T>(
-    context: Iterable<T> | Record<string, T>
-  ): Itrabble<T>;
+  export function from<T>(context: Iterable<T>): Itrabble<T>;
+  export function from<T>(context: Record<string, T>): Itrabble<[string, T]>;
 }
 
 declare module "itrabble/commonjs" {
   export function of<T>(...args: T[]): Itrabble<T>;
-  export function from<T>(
-    context: Iterable<T> | Record<string, T>
-  ): Itrabble<T>;
+  export function from<T>(context: Iterable<T>): Itrabble<T>;
+  export function from<T>(context: Record<string, T>): Itrabble<[string, T]>;
 }
 
 declare module "itrabble/pipeable" {
@@ -109,16 +113,20 @@ declare module "itrabble/pipeable" {
     n: number,
     callback: VariadicCallback<T>
   ): PipeableFunction<T>;
-  export function filter<T, U>(
+  export function filter<T, U extends T>(
     fn: PredicateFunction<T, U>
   ): PipeableFunction<T, U>;
   export function first<T>(): PipeableFunction<T>;
   export function forEach<T>(callback: BinaryCallback<T>): PipeableFunction<T>;
   export function last<T>(): PipeableFunction<T>;
   export function map<T, R>(fn: UnaryFunction<T, R>): PipeableFunction<T, R>;
-  export function toArray<T>(): PipeableFunction<T, T, Array>;
-  export function toMap<T>(): PipeableFunction<T, T, Map>;
-  export function toSet<T>(): PipeableFunction<T, T, Set>;
+  export function toArray<T>(): PipeableFunction<T, T, Array<T>>;
+  export function toMap<T, M = MappableValue<T>>(): PipeableFunction<
+    T,
+    T,
+    Map<M[0], M[1]>
+  >;
+  export function toSet<T>(): PipeableFunction<T, T, Set<T>>;
 }
 
 declare module "itrabble/commonjs/pipeable" {
