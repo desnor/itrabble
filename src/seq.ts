@@ -17,7 +17,9 @@
  * // => 1, 4
  */
 
-function *seq(n, offset=0) {
+import Itrabble from "./itrabble"
+
+function *seq<T>(this: Itrabble<T>, n: number, offset = 0) {
   let index = 0
   for (const item of this) {
     if (index % n === offset) yield item

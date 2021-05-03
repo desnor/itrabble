@@ -5,6 +5,8 @@
  * @returns {boolean} result - boolean result of arg applied to callback.
  */
 
+import Itrabble from "./itrabble"
+
 /**
  * Skips items until callback first returns true, yielding each thereafter.
  * (inverse of @takeUntil)
@@ -18,7 +20,7 @@
  * // => 4, 5, 4, 3, 2, 1
  */
 
-function *skipUntil(callback) {
+function *skipUntil<T>(this: Itrabble<T>, callback: (item: T) => boolean) {
   let skipping = true
   for (const item of this) {
     skipping = skipping && !callback(item)

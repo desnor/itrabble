@@ -11,7 +11,9 @@
  * // => 1, 2, 3
  */
 
-function *takeUntil(callback) {
+import Itrabble from "./itrabble"
+
+function *takeUntil<T>(this: Itrabble<T>, callback: (item: T) => boolean) {
   let taking = true
   for (const item of this) {
     taking = taking && !callback(item)

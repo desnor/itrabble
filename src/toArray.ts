@@ -13,7 +13,9 @@
  * // => an array: [1, 4, 9, 16]
  */
 
-function toArray(){
+import Itrabble from "./itrabble"
+
+function toArray<T>(this: Itrabble<T>){
   return Array.from(this)
 }
 

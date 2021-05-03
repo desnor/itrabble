@@ -1,3 +1,5 @@
+import Itrabble from "./itrabble"
+
 /**
  * Yields items until callback returns false.
  * (inverse of @skipWhile)
@@ -10,7 +12,7 @@
  * itrabble([1,2,3,4,5,4,3,2,1]).takeWhile(item => item < 4)
  * // => 1, 2, 3
  */
-function *takeWhile(callback) {
+function *takeWhile<T>(this: Itrabble<T>, callback: (item: T) => boolean) {
   let taking = true
   for (const item of this) {
     taking = taking && callback(item)

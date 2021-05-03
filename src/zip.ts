@@ -13,7 +13,9 @@
  * // => [1, ['a', 'A']], [2, ['b','B']], [3, ['c','C']], [4, ['d','D']]
  */
 
-function *zip(...its) {
+import Itrabble from "./itrabble"
+
+function *zip<T, S extends T>(this: Itrabble<T>, ...its: Iterable<S>[]): Generator<Array<T | S>> {
   const iterators = [
     this[Symbol.iterator](),
     ...its.map(it => it[Symbol.iterator]())

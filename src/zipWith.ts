@@ -5,6 +5,8 @@
  * @returns {*} result - result of applying args to callback.
  */
 
+import Itrabble from "./itrabble"
+
 /**
  * Zips iterated collection with any other given iterables, applying values from each
  * step through given callback function. Effectively a zip and a map in one. Zap!
@@ -20,7 +22,7 @@
  * // => '1a', '2b', '3c', '4d'
  */
 
-function *zipWith(callback, ...its) {
+function *zipWith<T, R, TS extends Iterable<T>[]>(this: Itrabble<T>, callback: (...items: (T | undefined)[]) => R, ...its: TS) {
   const iterators = [
     this[Symbol.iterator](),
     ...its.map(it => it[Symbol.iterator]())

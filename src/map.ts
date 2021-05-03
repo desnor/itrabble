@@ -16,7 +16,9 @@
  * // => '1', '2', '3'
  */
 
-function *map(callback) {
+import Itrabble from "./itrabble"
+
+function *map<T, R>(this: Itrabble<T>, callback: (item: T, index?: number) => R) {
   let index = 0
   for (const item of this) {
     yield callback(item, index)

@@ -14,7 +14,9 @@
  * // => 2
  */
 
-function *reject(callback) {
+import Itrabble from "./itrabble"
+
+function *reject<T, S extends T>(this: Itrabble<T>, callback: (item: T, index?: number) => item is S) {
   let index = 0
   for (const item of this) {
     if (!callback(item, index++)) {

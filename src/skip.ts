@@ -13,7 +13,9 @@
  * // => 3, 4, 5
  */
 
-function *skip(count) {
+import Itrabble from "./itrabble"
+
+function *skip<T>(this: Itrabble<T>, count: number) {
   for (const item of this) {
     if (count-- > 0) continue
     yield item
