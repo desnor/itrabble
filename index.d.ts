@@ -1,4 +1,4 @@
-type PredicateFunction<T, S extends T> = (value: T, index?: number) => boolean;
+type PredicateFunction<T, S extends T> = (value: T, index?: number) => value is S;
 type UnaryFunction<T, R> = (value: T) => R;
 type VariadicCallback<T> = (...values: T[]) => void;
 type BinaryCallback<T> = (value: T, index: number) => void;
@@ -21,7 +21,7 @@ declare function isObject<T>(value: any): value is Record<string, T>;
 
 declare class Itrabble<T> implements Iterable<T> {
   new(context: Iterable<T>): Itrabble<T>;
-  [Symbol.iterator](): Iterator<T>;
+  [Symbol.iterator](): IterableIterator<T>;
   pipe<A>(fn1: PipeableFunction<T, A>): Itrabble<A>;
   pipe<A, B>(
     fn1: PipeableFunction<T, A>,
@@ -94,19 +94,19 @@ declare class Itrabble<T> implements Iterable<T> {
   last(): Itrabble<T>;
 }
 
-declare module "itrabble" {
+declare module 'itrabble' {
   export function of<T>(...args: T[]): Itrabble<T>;
   export function from<T>(context: Iterable<T>): Itrabble<T>;
   export function from<T>(context: Record<string, T>): Itrabble<[string, T]>;
 }
 
-declare module "itrabble/commonjs" {
+declare module 'itrabble/commonjs' {
   export function of<T>(...args: T[]): Itrabble<T>;
   export function from<T>(context: Iterable<T>): Itrabble<T>;
   export function from<T>(context: Record<string, T>): Itrabble<[string, T]>;
 }
 
-declare module "itrabble/pipeable" {
+declare module 'itrabble/pipeable' {
   export function append<T, U>(...args: U[]): PipeableFunction<T, T | U>;
   export function concat<T, U>(args: Iterable<U>): PipeableFunction<T, T | U>;
   export function eachChunk<T>(
@@ -129,7 +129,7 @@ declare module "itrabble/pipeable" {
   export function toSet<T>(): PipeableFunction<T, T, Set<T>>;
 }
 
-declare module "itrabble/commonjs/pipeable" {
+declare module 'itrabble/commonjs/pipeable' {
   // export function append<T, U>(...args: U[]): PipeableFunction<T, T | U>;
   // export function concat<T, U>(args: Iterable<U>): PipeableFunction<T, T | U>;
   // export function eachChunk<T>(n: number, callback: VariadicCallback<T>): PipeableFunction<T>;
