@@ -1,3 +1,5 @@
+import Itrabble from './itrabble';
+
 /**
  * Converts iterable sequence into a Set, invoking any prior transforms.
  *
@@ -14,8 +16,8 @@
  * itrabble([[1,2],[3,4],[5,4],[3,2],1]).take(2).toSet()
  * // => Set { [ 1, 2 ], [ 3, 4 ] }
  */
-function toSet(){
-  return new Set(this)
+function toSet<T>(this: Itrabble<T>) {
+  return new Set(this);
 }
 
-export default toSet
+export default toSet;

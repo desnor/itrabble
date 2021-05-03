@@ -1,3 +1,5 @@
+import Itrabble from './itrabble';
+
 /**
  * Get the first item.
  *
@@ -8,11 +10,11 @@
  * itrabble([1,2,3]).first()
  * // => 1
  */
-function *first() {
+function* first<T>(this: Itrabble<T>) {
   for (const item of this) {
-    yield item
-    break
+    yield item as T;
+    break;
   }
 }
 
-export default first
+export default first;

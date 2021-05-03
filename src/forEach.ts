@@ -1,10 +1,4 @@
-/**
- * Callback function that accepts two parameters
- * @function binaryCallback
- * @param {*} firstArg
- * @param {*} secondArg
- * @returns {*} result - result of firstArg and secondArg applied to callback.
- */
+import Itrabble from './itrabble';
 
 /**
  * Pass each item through callback function. Doesn't use return value of callback.
@@ -21,12 +15,15 @@
  * // => 2: 3
  * // and yields 1, 2, 3
  */
-function *forEach(callback) {
-  let index = 0
+function* forEach<T>(
+  this: Itrabble<T>,
+  callback: (item: T, index?: number) => void
+) {
+  let index = 0;
   for (const item of this) {
-    callback(item, index++)
-    yield item
+    callback(item, index++);
+    yield item as T;
   }
 }
 
-export default forEach
+export default forEach;

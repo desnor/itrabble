@@ -1,3 +1,4 @@
+import Itrabble from './itrabble';
 /**
  * Reduce iterable collection into single yielded result.
  *
@@ -20,11 +21,15 @@
  * // => [ 8, 27 ]
  */
 
-function *reduce(callback, memo) {
+function* reduce<T, R>(
+  this: Itrabble<T>,
+  callback: (memo: R, item: T) => R,
+  memo: R
+) {
   for (const item of this) {
-    memo = callback(memo, item)
+    memo = callback(memo, item);
   }
-  yield memo
+  yield memo;
 }
 
-export default reduce
+export default reduce;

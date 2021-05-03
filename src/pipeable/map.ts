@@ -22,8 +22,8 @@
  * // => '1', '2', '3'
  */
 
-export function map(mapFn) {
-  return function* (context) {
+export function map<T, R>(mapFn: (item: T, index?: number) => R) {
+  return function* (context: Generator<T>) {
     let index = 0
     for (const item of context) {
       yield mapFn(item, index)

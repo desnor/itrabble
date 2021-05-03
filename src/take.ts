@@ -1,3 +1,5 @@
+import Itrabble from './itrabble';
+
 /**
  * Yields given count of items, optionally offset by given index.
  *
@@ -13,12 +15,12 @@
  * itrabble([1,2,3,4,5]).take(2, 1)
  * // => 2, 3
  */
-function *take(count, offset=0) {
+function* take<T>(this: Itrabble<T>, count: number, offset = 0) {
   for (const item of this) {
-    if (offset-- > 0) continue
-    if (count-- === 0) break
-    yield item
+    if (offset-- > 0) continue;
+    if (count-- === 0) break;
+    yield item as T;
   }
 }
 
-export default take
+export default take;

@@ -1,3 +1,5 @@
+import Itrabble from './itrabble';
+
 /**
  * Get the last item. -- WARNING: This will iterate through collection
  * until it reaches the end, so do not use on an infinite sequence!
@@ -9,10 +11,11 @@
  * itrabble([1,2,3]).last()
  * // => 3
  */
-function *last() {
-  let item
-  for (item of this) {} // eslint-disable-line no-empty
-  yield item
+function* last<T>(this: Itrabble<T>) {
+  let item: T | undefined;
+  for (item of this) {
+  } // eslint-disable-line no-empty
+  yield item;
 }
 
-export default last
+export default last;

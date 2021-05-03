@@ -1,3 +1,4 @@
+import Itrabble from './itrabble';
 /**
  * Reduces iterable collection into single result, yielding each iteration.
  *
@@ -20,11 +21,15 @@
  * // => [], [8], [8, 27]
  */
 
-function *scan(callback, memo) {
+function* scan<T, R>(
+  this: Itrabble<T>,
+  callback: (memo: R, item: T) => R,
+  memo: R
+) {
   for (const item of this) {
-    memo = callback(memo, item)
-    yield memo
+    memo = callback(memo, item);
+    yield memo;
   }
 }
 
-export default scan
+export default scan;

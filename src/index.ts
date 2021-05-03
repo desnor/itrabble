@@ -1,23 +1,22 @@
-import Itrabble from './itrabble.js'
-
-import {
-  isIterable,
-  isObject,
-} from './helpers/index.js'
+import Itrabble from './itrabble';
+import { isIterable, isObject } from './helpers';
+import { ItrabbleSource } from './util-types';
 
 /**
  * Accepts an iterable as a source. Alternatively if provided a plain object
  * it will return an itrabble instance over the entries of the given object
- * @param {Iterable<any> | {}} source
+ * @param {IterableSource<T> | {}} source
  */
-export function from(source) {
-  if (source instanceof Itrabble) return source
+export function from<T>(source: ItrabbleSource<T>) {
+  if (source instanceof Itrabble) return source;
 
-  if (isIterable(source)) return new Itrabble(source)
+  if (isIterable(source)) return new Itrabble(source);
 
-  if (isObject(source)) return new Itrabble(Object.entries(source))
+  if (isObject(source)) {
+    return new Itrabble(Object.entries(source));
+  }
 
-  return new Itrabble(Array.of(source))
+  return of(source);
 }
 
 /**
@@ -26,6 +25,6 @@ export function from(source) {
  *
  * @param  {...*} values
  */
-export function of(...values) {
-  return new Itrabble(values)
+export function of<T>(...values: T[]) {
+  return new Itrabble(values);
 }

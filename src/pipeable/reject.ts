@@ -18,8 +18,8 @@
  * // => 2
  */
 
-export function reject(callback) {
-  return function* (context) {
+export function reject<T>(callback: (item: T, index?: number) => boolean) {
+  return function* (context: Generator<T>) {
     let index = 0
     for (const item of context) {
       if (!callback(item, index++)) {

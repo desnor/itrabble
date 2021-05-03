@@ -1,5 +1,5 @@
 import Itrabble from './itrabble';
-import { Mappable } from './util-types';
+import { AsTuple } from './util-types';
 
 /**
  * Converts iterable sequence into a Map, invoking any prior transforms.
@@ -18,12 +18,8 @@ import { Mappable } from './util-types';
  * itrabble([[1,2],[3,4],5]).take(2).toMap()
  * // => new Map { 1 => 2, 3 => 4 }
  */
-function toMap<T>(this: Itrabble<T>): Map<Mappable<T>[0], Mappable<T>[1]> {
+function toMap<T>(this: Itrabble<T>): Map<AsTuple<T>[0], AsTuple<T>[1]> {
   return new Map(this);
 }
 
 export default toMap;
-type Tuple = [string, number];
-
-const array: Tuple[] = [['a', 1]];
-new Itrabble(array).toMap();

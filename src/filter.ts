@@ -1,12 +1,4 @@
-/**
- * Function to return true or false from two argument input.
- * @function predicateFnBinary
- * @param {*} firstArg
- * @param {*} secondArg
- * @returns {boolean} result - boolean result of firstArg and secondArg
- * applied to callback.
- */
-
+import Itrabble from './itrabble';
 /**
  * Filters items that return true from the given predicate function.
  *
@@ -21,13 +13,16 @@
  * itrabble([1,2,3]).filter((x, index) => x > 1 && index < 2)
  * // => 2
  */
-function *filter(predicateFn){
-  let index = 0
+function* filter<T, S extends T>(
+  this: Itrabble<T>,
+  predicateFn: (item: T, index?: number) => item is S
+) {
+  let index = 0;
   for (const item of this) {
     if (predicateFn(item, index++)) {
-      yield item
+      yield item as S;
     }
   }
 }
 
-export default filter
+export default filter;

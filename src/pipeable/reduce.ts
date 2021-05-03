@@ -20,17 +20,17 @@
  * @example <caption>reduce to filter and map items</caption>
  * itrabble([1,2,3]).pipe(
  *  reduce((memo, item) => {
-  *  return item > 1 ? memo.concat([ item ** 3 ]) : memo
-  * }, [])
+ *  return item > 1 ? memo.concat([ item ** 3 ]) : memo
+ * }, [])
  * )
  * // => [ 8, 27 ]
  */
 
-export function reduce(callback, memo) {
-  return function* (context) {
+export function reduce<T, R>(callback: (memo: R, item: T) => R, memo: R) {
+  return function*(context: Generator<T>) {
     for (const item of context) {
-      memo = callback(memo, item)
+      memo = callback(memo, item);
     }
-    yield memo
-  }
+    yield memo;
+  };
 }
