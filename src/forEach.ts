@@ -17,12 +17,12 @@ import Itrabble from './itrabble';
  */
 function* forEach<T>(
   this: Itrabble<T>,
-  callback: (item: T, index?: number) => void
+  callback: (item: T, index: number) => void
 ) {
   let index = 0;
   for (const item of this) {
     callback(item, index++);
-    yield item as T;
+    yield item;
   }
 }
 

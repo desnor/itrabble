@@ -26,11 +26,17 @@
  * // => [], [8], [8, 27]
  */
 
-export function scan(callback, memo) {
+import { PipeableFunction } from '../util-types';
+
+export function scan<T, U>(
+  callback: (memo: U, item: T, index: number) => U,
+  memo: U
+): PipeableFunction<T, U> {
   return function* (context) {
+    let index = 0;
     for (const item of context) {
-      memo = callback(memo, item)
-      yield memo
+      memo = callback(memo, item, index++);
+      yield memo;
     }
-  }
+  };
 }

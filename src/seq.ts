@@ -17,7 +17,7 @@
  * // => 1, 4
  */
 
-import Itrabble from "./itrabble"
+import Itrabble from './itrabble'
 
 function *seq<T>(this: Itrabble<T>, n: number, offset = 0) {
   let index = 0

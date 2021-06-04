@@ -1,3 +1,5 @@
+import { PipeableFunction } from '../util-types';
+
 /**
  * Passes each {n} length chunk of items through callback function. If collection
  * doesn't divide evenly into n items, the final chunk will contain remaining items.
@@ -5,7 +7,7 @@
  *
  * @generator pipeable eachChunk
  * @param {Number} n - The number of items per chunk.
- * @param {variadicCallback} callback - The callback which receives all {n} items in chunk.
+ * @param {variadicCallback} callback - The callback which receives a spread of all {n} items in chunk.
  * @yields {*} item - the next item from the collection.
  *
  * @example <caption>Example usage of eachChunk to log items</caption>
@@ -17,20 +19,23 @@
  * // => 4, 5
  * // and yields 1, 2, 3, 4, 5
  */
-
-export function eachChunk(n, callback) {
+export function eachChunk<T>(
+  n: number,
+  callback: (...items: T[]) => void
+): PipeableFunction<T> {
   return function* (context) {
-    if (n < 1) throw new RangeError(`Chunk size must be at least 1: ${n} given`)
+    if (n < 1)
+      throw new RangeError(`Chunk size must be at least 1: ${n} given`);
 
-    let chunk = []
+    let chunk = [];
     for (const item of context) {
-      chunk.push(item)
+      chunk.push(item);
       if (chunk.length === n) {
-        callback(...chunk)
-        chunk = []
+        callback(...chunk);
+        chunk = [];
       }
-      yield item
+      yield item;
     }
-    if (chunk.length > 0) callback(...chunk)
-  }
+    if (chunk.length > 0) callback(...chunk);
+  };
 }

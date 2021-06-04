@@ -13,14 +13,14 @@ import Itrabble from './itrabble';
  * itrabble([1,2,3]).filter((x, index) => x > 1 && index < 2)
  * // => 2
  */
-function* filter<T, S extends T>(
+function* filter<T>(
   this: Itrabble<T>,
-  predicateFn: (item: T, index?: number) => item is S
+  predicateFn: (item: T, index: number) => boolean
 ) {
   let index = 0;
   for (const item of this) {
     if (predicateFn(item, index++)) {
-      yield item as S;
+      yield item;
     }
   }
 }

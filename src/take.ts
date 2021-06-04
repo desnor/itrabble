@@ -19,7 +19,7 @@ function* take<T>(this: Itrabble<T>, count: number, offset = 0) {
   for (const item of this) {
     if (offset-- > 0) continue;
     if (count-- === 0) break;
-    yield item as T;
+    yield item;
   }
 }
 

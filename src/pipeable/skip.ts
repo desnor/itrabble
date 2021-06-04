@@ -1,3 +1,5 @@
+import { PipeableFunction } from '../util-types';
+
 /**
  * Skips given number of items, yielding each thereafter.
  *
@@ -16,12 +18,13 @@
  * )
  * // => 3, 4, 5
  */
-
-export function skip(count) {
+function skip<T>(count: number): PipeableFunction<T> {
   return function* (context) {
     for (const item of context) {
-      if (count-- > 0) continue
-      yield item
+      if (count-- > 0) continue;
+      yield item;
     }
-  }
+  };
 }
+
+export { skip };

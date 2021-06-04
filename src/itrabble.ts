@@ -14,15 +14,14 @@ import skipWhile from './skipWhile';
 import take from './take';
 import takeUntil from './takeUntil';
 import takeWhile from './takeWhile';
+import {
+  GetGeneratorType,
+  ItrabbleSource,
+  PipeableFunction,
+} from './util-types';
 import zip from './zip';
 import zipAll from './zipAll';
 import zipWith from './zipWith';
-
-import toArray from './toArray';
-import toMap from './toMap';
-import toSet from './toSet';
-
-import { GetGeneratorType, ItrabbleSource, PipeableFunction, PiperFns } from './util-types';
 
 const iterableMethods = {
   eachChunk,
@@ -44,248 +43,195 @@ const iterableMethods = {
   zip,
   zipAll,
   zipWith,
-};
+} as const;
 
-const invocationMethods = {
-  toArray,
-  toMap,
-  toSet,
-};
+export type IterableMethods = typeof iterableMethods;
 
-type IterableMethods = typeof iterableMethods;
-type InvocationMethods = typeof invocationMethods;
+export type ItrabbleBoundMethods = {
+  [M in keyof IterableMethods]: (
+    ...args: Parameters<IterableMethods[M]>
+  ) => Itrabble<GetGeneratorType<ReturnType<IterableMethods[M]>>>;
+};
 
 export interface Itrabble<T>
-  extends Iterable<T>,
-    IterableMethods,
-    InvocationMethods {}
+  extends IterableIterator<T>,
+    ItrabbleBoundMethods {}
 
 export class Itrabble<T> implements Itrabble<T> {
-  private context: ItrabbleSource<T>;
-
   constructor(context: ItrabbleSource<T>) {
-    this.context = context;
-    if (!this || this.constructor !== Itrabble) return new Itrabble(context);
-    this.addEnumerables(iterableMethods, invocationMethods);
+    this.addEnumerables(iterableMethods);
+
+    (this as any)[Symbol.iterator] = context[Symbol.iterator].bind(context);
   }
 
-  *[Symbol.iterator]() {
-    return (this.context as Iterable<T>)[Symbol.iterator].bind(this.context);
-  }
-
-  addEnumerables(enumerables: IterableMethods, invocations: InvocationMethods) {
-    Object.entries(enumerables).forEach(([name, implementation]) => {
-      Object.defineProperty(this, name, {
-        value: this.buildIterator(implementation),
-        enumerable: false,
-      });
-    });
-    Object.entries(invocations).forEach(([name, method]) => {
-      Object.defineProperty(this, name, {
-        value: method.bind(this),
-        enumerable: false,
-      });
+  addEnumerables(this: Itrabble<T>, iterables: IterableMethods) {
+    Object.entries(iterables).forEach(([name, implementation]) => {
+      (this as any)[name] = this.buildIterator(implementation);
     });
   }
 
-  buildIterator<K extends keyof IterableMethods, M extends IterableMethods[K], R extends GetGeneratorType<ReturnType<M>>>(
-    iteratorFunc: M
-  ) {
+  buildIterator<
+    K extends keyof IterableMethods,
+    M extends IterableMethods[K],
+    R extends GetGeneratorType<ReturnType<M>>
+  >(this: Itrabble<T>, iteratorFunc: M) {
     return (...args: Parameters<M>) =>
       new Itrabble<R>({
-        *[Symbol.iterator]() {
-          return (iteratorFunc as any).bind(this, ...args);
-        },
+        [Symbol.iterator]: (iteratorFunc as any).bind(this, ...args),
       });
   }
 
-  pipe<A>(...iteratorFuncs: PiperFns<T, A>): Itrabble<A>;
-  // pipe<A>(fn1: PipeableFunction<T, A>): Itrabble<A>;
+  /**
+   * Converts iterable sequence into an Array, invoking any prior transforms.
+   *
+   * @function toArray
+   * @returns {Array} - the iterated context as an array.
+   *
+   * @example <caption>an `itrabble` is an iterable over the given values</caption>
+   * itrabble([1,2,3,4,5])
+   * // => an iterable sequence yielding: { 1, 2, 3, 4, 5 }
+   * @example <caption>toArray invokes itrabble sequence, converting result
+   * into an array</caption>
+   * itrabble([1,2,3,4,5]).map(x => x * x).take(4).toArray()
+   * // => an array: [1, 4, 9, 16]
+   */
+  toArray() {
+    return Array.from(this);
+  }
+
+  /**
+   * Converts iterable sequence into a Map, invoking any prior transforms.
+   * Optional formatFn can be given to return a specific format for the Map.
+   *
+   * @function toMap
+   * @returns {Map} - the iterated context invoked and formatted into a Map.
+   *
+   * @example <caption>an `itrabble` is an iterable over the given values</caption>
+   * itrabble([[1,2],[3,4],5])
+   * // => an iterable sequence yielding: { [1, 2], [3, 4], 5 }
+   * @example <caption>calling toMap on a malformed map shape throws error</caption>
+   * itrabble([[1,2],[3,4],5]).toMap()
+   * // => TypeError: Iterator value 5 is not an entry object
+   * @example <caption>toMap when no formatFn given</caption>
+   * itrabble([[1,2],[3,4],5]).take(2).toMap()
+   * // => new Map { 1 => 2, 3 => 4 }
+   */
+  toMap<U extends [unknown, unknown] | readonly [unknown, unknown]>(
+    this: Itrabble<U>
+  ): Map<U[0], U[1]> {
+    return new Map(this);
+  }
+
+  /**
+   * Converts iterable sequence into a Set, invoking any prior transforms.
+   *
+   * @function toSet
+   * @returns {Set} - the iterated context invoked and formatted into a Set.
+   *
+   * @example <caption>an `itrabble` is an iterable over the given values</caption>
+   * itrabble([1,2,3,4,5,4,3,2,1])
+   * // => an iterable sequence yielding: { 1, 2, 3, 4, 5, 4, 3, 2, 1 }
+   * @example <caption>toSet converts straight into a Set</caption>
+   * itrabble([1,2,3,4,5,4,3,2,1]).toSet()
+   * // => Set { 1, 2, 3, 4, 5}
+   * @example <caption>toSet invokes transforms before converting into Set</caption>
+   * itrabble([[1,2],[3,4],[5,4],[3,2],1]).take(2).toSet()
+   * // => Set { [ 1, 2 ], [ 3, 4 ] }
+   */
+  toSet() {
+    return new Set(this);
+  }
+
+  pipe<A>(this: IterableIterator<T>, fn1: PipeableFunction<T, A>): Itrabble<A>;
   pipe<A, B>(
-    ...iteratorFuncs: PiperFns<T, A, B>
-    // fn1: PipeableFunction<T, A>,
-    // fn2: FinalPipeableFunction<A, B>
+    this: IterableIterator<T>,
+    fn1: PipeableFunction<T, A>,
+    fn2: PipeableFunction<A, B>
   ): Itrabble<B>;
   pipe<A, B, C>(
-    ...iteratorFuncs: PiperFns<T, A | B, C>
-    // fn1: PipeableFunction<T, A>,
-    // fn2: MidPipeableFunction<A, B>,
-    // fn3: FinalPipeableFunction<B, C>
+    this: IterableIterator<T>,
+    fn1: PipeableFunction<T, A>,
+    fn2: PipeableFunction<A, B>,
+    fn3: PipeableFunction<B, C>
   ): Itrabble<C>;
   pipe<A, B, C, D>(
-    ...iteratorFuncs: PiperFns<T, A | B | C, D>
-  //   fn1: PipeableFunction<T, A>,
-  //   fn2: MidPipeableFunction<A, B>,
-  //   fn3: MidPipeableFunction<B, C>,
-  //   fn4: MidPipeableFunction<C, D>
+    this: IterableIterator<T>,
+    fn1: PipeableFunction<T, A>,
+    fn2: PipeableFunction<A, B>,
+    fn3: PipeableFunction<B, C>,
+    fn4: PipeableFunction<C, D>
   ): Itrabble<D>;
   pipe<A, B, C, D, E>(
-    ...iteratorFuncs: PiperFns<T, A | B | C | D, E>
-    // fn1: PipeableFunction<T, A>,
-    // fn2: MidPipeableFunction<A, B>,
-    // fn3: MidPipeableFunction<B, C>,
-    // fn4: MidPipeableFunction<C, D>,
-    // fn5: FinalPipeableFunction<D, E>
+    this: IterableIterator<T>,
+    fn1: PipeableFunction<T, A>,
+    fn2: PipeableFunction<A, B>,
+    fn3: PipeableFunction<B, C>,
+    fn4: PipeableFunction<C, D>,
+    fn5: PipeableFunction<D, E>
   ): Itrabble<E>;
-  // pipe<A, B, C, D, E, F>(
-  //   fn1: PipeableFunction<T, A>,
-  //   fn2: MidPipeableFunction<A, B>,
-  //   fn3: MidPipeableFunction<B, C>,
-  //   fn4: MidPipeableFunction<C, D>,
-  //   fn5: MidPipeableFunction<D, E>,
-  //   fn6: FinalPipeableFunction<E, F>
-  // ): Itrabble<F>;
-  // pipe<A, B, C, D, E, F, G>(
-  //   fn1: PipeableFunction<T, A>,
-  //   fn2: MidPipeableFunction<A, B>,
-  //   fn3: MidPipeableFunction<B, C>,
-  //   fn4: MidPipeableFunction<C, D>,
-  //   fn5: MidPipeableFunction<D, E>,
-  //   fn6: MidPipeableFunction<E, F>,
-  //   fn7: FinalPipeableFunction<F, G>
-  // ): Itrabble<G>;
-  // pipe<A, B, C, D, E, F, G, H>(
-  //   fn1: PipeableFunction<T, A>,
-  //   fn2: MidPipeableFunction<A, B>,
-  //   fn3: MidPipeableFunction<B, C>,
-  //   fn4: MidPipeableFunction<C, D>,
-  //   fn5: MidPipeableFunction<D, E>,
-  //   fn6: MidPipeableFunction<E, F>,
-  //   fn7: MidPipeableFunction<F, G>,
-  //   fn8: FinalPipeableFunction<G, H>
-  // ): Itrabble<H>;
-  // pipe<A, B, C, D, E, F, G, H, I>(
-  //   fn1: PipeableFunction<T, A>,
-  //   fn2: MidPipeableFunction<A, B>,
-  //   fn3: MidPipeableFunction<B, C>,
-  //   fn4: MidPipeableFunction<C, D>,
-  //   fn5: MidPipeableFunction<D, E>,
-  //   fn6: MidPipeableFunction<E, F>,
-  //   fn7: MidPipeableFunction<F, G>,
-  //   fn8: MidPipeableFunction<G, H>,
-  //   fn9: FinalPipeableFunction<H, I>
-  // ): Itrabble<I>;
+  pipe<A, B, C, D, E, F>(
+    this: IterableIterator<T>,
+    fn1: PipeableFunction<T, A>,
+    fn2: PipeableFunction<A, B>,
+    fn3: PipeableFunction<B, C>,
+    fn4: PipeableFunction<C, D>,
+    fn5: PipeableFunction<D, E>,
+    fn6: PipeableFunction<E, F>
+  ): Itrabble<F>;
+  pipe<A, B, C, D, E, F, G>(
+    this: IterableIterator<T>,
+    fn1: PipeableFunction<T, A>,
+    fn2: PipeableFunction<A, B>,
+    fn3: PipeableFunction<B, C>,
+    fn4: PipeableFunction<C, D>,
+    fn5: PipeableFunction<D, E>,
+    fn6: PipeableFunction<E, F>,
+    fn7: PipeableFunction<F, G>
+  ): Itrabble<G>;
+  pipe<A, B, C, D, E, F, G, H>(
+    this: IterableIterator<T>,
+    fn1: PipeableFunction<T, A>,
+    fn2: PipeableFunction<A, B>,
+    fn3: PipeableFunction<B, C>,
+    fn4: PipeableFunction<C, D>,
+    fn5: PipeableFunction<D, E>,
+    fn6: PipeableFunction<E, F>,
+    fn7: PipeableFunction<F, G>,
+    fn8: PipeableFunction<G, H>
+  ): Itrabble<H>;
+  pipe<A, B, C, D, E, F, G, H, I>(
+    this: IterableIterator<T>,
+    fn1: PipeableFunction<T, A>,
+    fn2: PipeableFunction<A, B>,
+    fn3: PipeableFunction<B, C>,
+    fn4: PipeableFunction<C, D>,
+    fn5: PipeableFunction<D, E>,
+    fn6: PipeableFunction<E, F>,
+    fn7: PipeableFunction<F, G>,
+    fn8: PipeableFunction<G, H>,
+    fn9: PipeableFunction<H, I>
+  ): Itrabble<I>;
+  pipe<A, B, C, D, E, F, G, H, I, J>(
+    this: IterableIterator<T>,
+    fn1: PipeableFunction<T, A>,
+    fn2: PipeableFunction<A, B>,
+    fn3: PipeableFunction<B, C>,
+    fn4: PipeableFunction<C, D>,
+    fn5: PipeableFunction<D, E>,
+    fn6: PipeableFunction<E, F>,
+    fn7: PipeableFunction<F, G>,
+    fn8: PipeableFunction<G, H>,
+    fn9: PipeableFunction<H, I>,
+    fn10: PipeableFunction<I, J>
+  ): Itrabble<J>;
+  pipe(
+    this: IterableIterator<T>,
+    ...iteratorFuncs: PipeableFunction<T, unknown>[]
+  ) {
+    const pipeline = iteratorFuncs.reduce((memo: any, fn) => fn(memo), this);
 
-  pipe(this: Itrabble<T>, ...iteratorFuncs: PiperFns<T, unknown, unknown>) {
-    const pipeline = piper(this, ...iteratorFuncs);
     return new Itrabble(pipeline);
   }
 }
 
-// type Pipe<T> = {
-//   pipe<A>(...iteratorFuncs: PiperFns<T, A>): Itrabble<A>;
-//   // pipe<A>(fn1: PipeableFunction<T, A>): Itrabble<A>;
-//   pipe<A, B>(
-//     ...iteratorFuncs: PiperFns<T, A, B>
-//     // fn1: PipeableFunction<T, A>,
-//     // fn2: FinalPipeableFunction<A, B>
-//   ): Itrabble<B>;
-//   pipe<A, B, C>(
-//     ...iteratorFuncs: PiperFns<T, A | B, C>
-//     // fn1: PipeableFunction<T, A>,
-//     // fn2: MidPipeableFunction<A, B>,
-//     // fn3: FinalPipeableFunction<B, C>
-//   ): Itrabble<C>;
-//   pipe<A, B, C, D>(
-//     ...iteratorFuncs: PiperFns<T, A | B | C, D>
-//   //   fn1: PipeableFunction<T, A>,
-//   //   fn2: MidPipeableFunction<A, B>,
-//   //   fn3: MidPipeableFunction<B, C>,
-//   //   fn4: MidPipeableFunction<C, D>
-//   ): Itrabble<D>;
-//   pipe<A, B, C, D, E>(
-//     ...iteratorFuncs: PiperFns<T, A | B | C | D, E>
-//     // fn1: PipeableFunction<T, A>,
-//     // fn2: MidPipeableFunction<A, B>,
-//     // fn3: MidPipeableFunction<B, C>,
-//     // fn4: MidPipeableFunction<C, D>,
-//     // fn5: FinalPipeableFunction<D, E>
-//   ): Itrabble<E>;
-//   // pipe<A, B, C, D, E, F>(
-//   //   fn1: PipeableFunction<T, A>,
-//   //   fn2: MidPipeableFunction<A, B>,
-//   //   fn3: MidPipeableFunction<B, C>,
-//   //   fn4: MidPipeableFunction<C, D>,
-//   //   fn5: MidPipeableFunction<D, E>,
-//   //   fn6: FinalPipeableFunction<E, F>
-//   // ): Itrabble<F>;
-//   // pipe<A, B, C, D, E, F, G>(
-//   //   fn1: PipeableFunction<T, A>,
-//   //   fn2: MidPipeableFunction<A, B>,
-//   //   fn3: MidPipeableFunction<B, C>,
-//   //   fn4: MidPipeableFunction<C, D>,
-//   //   fn5: MidPipeableFunction<D, E>,
-//   //   fn6: MidPipeableFunction<E, F>,
-//   //   fn7: FinalPipeableFunction<F, G>
-//   // ): Itrabble<G>;
-//   // pipe<A, B, C, D, E, F, G, H>(
-//   //   fn1: PipeableFunction<T, A>,
-//   //   fn2: MidPipeableFunction<A, B>,
-//   //   fn3: MidPipeableFunction<B, C>,
-//   //   fn4: MidPipeableFunction<C, D>,
-//   //   fn5: MidPipeableFunction<D, E>,
-//   //   fn6: MidPipeableFunction<E, F>,
-//   //   fn7: MidPipeableFunction<F, G>,
-//   //   fn8: FinalPipeableFunction<G, H>
-//   // ): Itrabble<H>;
-//   // pipe<A, B, C, D, E, F, G, H, I>(
-//   //   fn1: PipeableFunction<T, A>,
-//   //   fn2: MidPipeableFunction<A, B>,
-//   //   fn3: MidPipeableFunction<B, C>,
-//   //   fn4: MidPipeableFunction<C, D>,
-//   //   fn5: MidPipeableFunction<D, E>,
-//   //   fn6: MidPipeableFunction<E, F>,
-//   //   fn7: MidPipeableFunction<F, G>,
-//   //   fn8: MidPipeableFunction<G, H>,
-//   //   fn9: FinalPipeableFunction<H, I>
-//   // ): Itrabble<I>;
-//   }
-// type PipeResult<T extends PiperFns<any, any>> = T extends PiperFns<any, any> ? Last<T> extends Generator<infer P> ? P : never : never;
-
-// type PipeIn<T extends PiperFns<any, any>> = T extends PiperFns<infer A, any> ?
-// type PipeInOut<T extends PiperFns<any, any>> =
-
-// type LastPiperFn<T> = Last<PiperFns<1, 3>>
-// type LastPiperFnReturnValue = GeneratorValue<ReturnType<LastPiperFn>>
-// type PipeInput<T extends PiperFns<any, any>> = ReturnType<First<T>>;
-// type PipeResult<T extends PiperFns<any, any>> = ReturnType<Last<T>>;
-// type UnwrappedPipeValue<T extends IterableIterator<PipeResult<any>>> = T extends IterableIterator<PipeResult<any>> ? T : never;
-
-// type FNS = PiperFns<1, unknown>;
-// type OUT = PipeResult<FNS>;
-// type IN = PipeInput<FNS>;
-
-// type last = Last<[1, 2]>
-// type mid = Mid<[1, 2, 3]>
-// type two = Mid<[1, 2, string, 3, 4, 5, 6]>
-// const pipe: Pipe<any> = (this: Itrabble<any>, ...iteratorFuncs: PiperFns<T>) => {
-//   const pipeline = (iteratorFuncs as any).reduce((memo: Generator<T> | Itrabble<T>, fn: PipeableFunction<T>) => fn(memo), this);
-//   return new Itrabble(pipeline);
-// }
-
-function piper<T, R>(input: Itrabble<T>, ...fns: PiperFns<T, unknown, R>): Generator<R> {
-  return (fns as any).reduce(pipeReducer, input);
-}
-
-function pipeReducer<T, R>(
-  memo: IterableIterator<T>,
-  func: PipeableFunction<T, R>
-) {
-  return func(memo);
-}
-
-// const _res = new Itrabble(['1', '2', '3']).pipe(
-//   function*(ctx) {
-//     for (const item of ctx) {
-//       yield parseInt(item, 10);
-//     }
-//   },
-//   function*(ctx) {
-//     for (const item of ctx) {
-//       yield item > 2;
-//     }
-//   }
-// );
-
-// console.log('res:', _res)
 export default Itrabble;

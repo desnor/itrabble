@@ -1,3 +1,5 @@
+import { PipeableFunction } from '../util-types';
+
 /**
  * Yields items until callback first returns true.
  * (inverse of @skipUntil)
@@ -13,13 +15,18 @@
  * // => 1, 2, 3
  */
 
-export function takeUntil(callback) {
+function takeUntil<T>(
+  callback: (item: T, index: number) => boolean
+): PipeableFunction<T> {
   return function* (context) {
-    let taking = true
+    let taking = true;
+    let index = 0;
     for (const item of context) {
-      taking = taking && !callback(item)
-      if (!taking) break
-      yield item
+      taking = taking && !callback(item, index++);
+      if (!taking) break;
+      yield item;
     }
-  }
+  };
 }
+
+export { takeUntil };

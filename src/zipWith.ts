@@ -5,7 +5,7 @@
  * @returns {*} result - result of applying args to callback.
  */
 
-import Itrabble from "./itrabble"
+import Itrabble from './itrabble';
 
 /**
  * Zips iterated collection with any other given iterables, applying values from each
@@ -22,16 +22,26 @@ import Itrabble from "./itrabble"
  * // => '1a', '2b', '3c', '4d'
  */
 
-function *zipWith<T, R, TS extends Iterable<T>[]>(this: Itrabble<T>, callback: (...items: (T | undefined)[]) => R, ...its: TS) {
+function* zipWith<
+  T extends unknown,
+  R extends unknown,
+  IS extends Iterable<unknown>[],
+  IST extends [
+    ...{
+      [I in keyof IS]: IS[I] extends Iterable<infer U> ? U : unknown;
+    }
+  ],
+  TS extends [T, ...IST]
+>(this: Itrabble<T>, callback: (...items: TS) => R, ...its: IS) {
   const iterators = [
     this[Symbol.iterator](),
-    ...its.map(it => it[Symbol.iterator]())
-  ]
-  while (true) { // eslint-disable-line no-constant-condition
-    const next = iterators.map(it => it.next())
-    if (next.every(elm => elm.done)) break
-    yield (callback(...next.map(elm => elm.value)))
+    ...its.map((it) => it[Symbol.iterator]()),
+  ];
+  while (true) {
+    const next = iterators.map((it) => it.next());
+    if (next.every((elm) => elm.done)) break;
+    yield callback(...(next.map((elm) => elm.value) as TS));
   }
 }
 
-export default zipWith
+export default zipWith;

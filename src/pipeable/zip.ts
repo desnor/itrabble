@@ -1,3 +1,5 @@
+import { PipeableFunction } from '../util-types';
+
 /**
  * Zips iterated collection with any given iterables.
  *
@@ -17,16 +19,28 @@
  * // => [1, ['a', 'A']], [2, ['b','B']], [3, ['c','C']], [4, ['d','D']]
  */
 
-export function zip(...its) {
+function zip<
+  T extends unknown,
+  IS extends Iterable<unknown>[],
+  IST extends [
+    ...{
+      [I in keyof IS]: IS[I] extends Iterable<infer U> ? U : unknown;
+    }
+  ],
+  TS extends [T, ...IST]
+>(...its: IS): PipeableFunction<T, TS> {
   return function* (context) {
     const iterators = [
       context[Symbol.iterator](),
-      ...its.map(it => it[Symbol.iterator]())
-    ]
-    while (true) { // eslint-disable-line no-constant-condition
-      const next = iterators.map(it => it.next())
-      if (next.some(elm => elm.done)) break
-      yield (next.map(elm => elm.value))
+      ...its.map((it) => it[Symbol.iterator]()),
+    ];
+
+    while (true) {
+      const next = iterators.map((it) => it.next());
+      if (next.some((elm) => elm.done)) break;
+      yield next.map((elm) => elm.value) as TS;
     }
-  }
+  };
 }
+
+export { zip };

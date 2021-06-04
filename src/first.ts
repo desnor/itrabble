@@ -12,7 +12,7 @@ import Itrabble from './itrabble';
  */
 function* first<T>(this: Itrabble<T>) {
   for (const item of this) {
-    yield item as T;
+    yield item;
     break;
   }
 }

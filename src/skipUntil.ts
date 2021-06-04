@@ -5,14 +5,14 @@
  * @returns {boolean} result - boolean result of arg applied to callback.
  */
 
-import Itrabble from "./itrabble"
+import Itrabble from './itrabble';
 
 /**
  * Skips items until callback first returns true, yielding each thereafter.
  * (inverse of @takeUntil)
  *
  * @generator skipUntil
- * @param {predicateFnUnary} callback - function to apply each item to.
+ * @param {predicateFnUnary} callback - function to apply each item and its index to.
  * @yields {*} item - the next item.
  *
  * @example <caption>skipUntil an item is greater than 3</caption>
@@ -20,12 +20,16 @@ import Itrabble from "./itrabble"
  * // => 4, 5, 4, 3, 2, 1
  */
 
-function *skipUntil<T>(this: Itrabble<T>, callback: (item: T) => boolean) {
-  let skipping = true
+function* skipUntil<T>(
+  this: Itrabble<T>,
+  callback: (item: T, index: number) => boolean
+) {
+  let i = 0;
+  let skipping = true;
   for (const item of this) {
-    skipping = skipping && !callback(item)
-    if (!skipping) yield item
+    skipping = skipping && !callback(item, i++);
+    if (!skipping) yield item;
   }
 }
 
-export default skipUntil
+export default skipUntil;

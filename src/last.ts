@@ -14,7 +14,7 @@ import Itrabble from './itrabble';
 function* last<T>(this: Itrabble<T>) {
   let item: T | undefined;
   for (item of this) {
-  } // eslint-disable-line no-empty
+  }
   yield item;
 }
 

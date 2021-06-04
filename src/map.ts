@@ -16,14 +16,17 @@
  * // => '1', '2', '3'
  */
 
-import Itrabble from "./itrabble"
+import Itrabble from './itrabble';
 
-function *map<T, R>(this: Itrabble<T>, callback: (item: T, index?: number) => R) {
-  let index = 0
+function* map<T, R>(
+  this: Itrabble<T>,
+  callback: (item: T, index: number) => R
+) {
+  let index = 0;
   for (const item of this) {
-    yield callback(item, index)
-    index += 1
+    yield callback(item, index);
+    index += 1;
   }
 }
 
-export default map
+export default map;

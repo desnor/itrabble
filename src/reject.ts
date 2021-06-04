@@ -14,15 +14,18 @@
  * // => 2
  */
 
-import Itrabble from "./itrabble"
+import Itrabble from './itrabble';
 
-function *reject<T, S extends T>(this: Itrabble<T>, callback: (item: T, index?: number) => item is S) {
-  let index = 0
+function* reject<T>(
+  this: Itrabble<T>,
+  callback: (item: T, index: number) => boolean
+) {
+  let index = 0;
   for (const item of this) {
     if (!callback(item, index++)) {
-      yield item
+      yield item;
     }
   }
 }
 
-export default reject
+export default reject;

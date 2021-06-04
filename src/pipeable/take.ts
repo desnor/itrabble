@@ -1,3 +1,5 @@
+import { PipeableFunction } from '../util-types';
+
 /**
  * Yields given count of items, optionally offset by given index.
  *
@@ -17,12 +19,14 @@
  * )
  * // => 2, 3
  */
-export function take(count, offset = 0) {
+function take<T>(count: number, offset = 0): PipeableFunction<T> {
   return function* (context) {
     for (const item of context) {
-      if (offset-- > 0) continue
-      if (count-- === 0) break
-      yield item
+      if (offset-- > 0) continue;
+      if (count-- === 0) break;
+      yield item;
     }
-  }
+  };
 }
+
+export { take };

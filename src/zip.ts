@@ -13,18 +13,27 @@
  * // => [1, ['a', 'A']], [2, ['b','B']], [3, ['c','C']], [4, ['d','D']]
  */
 
-import Itrabble from "./itrabble"
+import Itrabble from './itrabble';
 
-function *zip<T, S extends T>(this: Itrabble<T>, ...its: Iterable<S>[]): Generator<Array<T | S>> {
+function* zip<
+  T extends unknown,
+  IS extends Iterable<unknown>[],
+  IST extends [
+    ...{
+      [I in keyof IS]: IS[I] extends Iterable<infer U> ? U : unknown;
+    }
+  ],
+  TS extends [T, ...IST]
+>(this: Itrabble<T>, ...its: IS) {
   const iterators = [
     this[Symbol.iterator](),
-    ...its.map(it => it[Symbol.iterator]())
-  ]
-  while (true) { // eslint-disable-line no-constant-condition
-    const next = iterators.map(it => it.next())
-    if (next.some(elm => elm.done)) break
-    yield (next.map(elm => elm.value))
+    ...its.map((it) => it[Symbol.iterator]()),
+  ];
+  while (true) {
+    const next = iterators.map((it) => it.next());
+    if (next.some((elm) => elm.done)) break;
+    yield next.map((elm) => elm.value) as TS;
   }
 }
 
-export default zip
+export default zip;

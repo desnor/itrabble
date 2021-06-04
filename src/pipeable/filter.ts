@@ -1,11 +1,4 @@
-/**
- * Function to return true or false from two argument input.
- * @function predicateFnBinary
- * @param {*} firstArg
- * @param {*} secondArg
- * @returns {boolean} result - boolean result of firstArg and secondArg
- * applied to callback.
- */
+import { PipeableFunction } from '../util-types';
 
 /**
  * Filters items that return true from the given predicate function.
@@ -25,13 +18,15 @@
  * )
  * // => 2
  */
-export function filter(predicateFn) {
+export function filter<T>(
+  predicateFn: (item: T, index: number) => boolean
+): PipeableFunction<T> {
   return function* (context) {
-    let index = 0
+    let index = 0;
     for (const item of context) {
       if (predicateFn(item, index++)) {
-        yield item
+        yield item;
       }
     }
-  }
+  };
 }

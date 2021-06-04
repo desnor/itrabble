@@ -3,9 +3,9 @@ import Itrabble from './itrabble';
  * Reduce iterable collection into single yielded result.
  *
  * @generator reduce
- * @param {binaryCallback} callback - Callback for memo and item.
+ * @param {binaryCallback} callback - Callback for memo, each item and its index.
  * @param {*} memo - initial value of memo
- * @yields {*} memo - the accumulated result of passing memo and each item
+ * @yields {*} memo - the accumulated result of passing memo, each item and its index
  * to callback.
  *
  * @example <caption>reduce to sum items</caption>
@@ -23,11 +23,12 @@ import Itrabble from './itrabble';
 
 function* reduce<T, R>(
   this: Itrabble<T>,
-  callback: (memo: R, item: T) => R,
+  callback: (memo: R, item: T, index: number) => R,
   memo: R
 ) {
+  let index = 0;
   for (const item of this) {
-    memo = callback(memo, item);
+    memo = callback(memo, item, index++);
   }
   yield memo;
 }

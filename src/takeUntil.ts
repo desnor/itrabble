@@ -3,7 +3,7 @@
  * (inverse of @skipUntil)
  *
  * @generator takeUntil
- * @param {predicateFnUnary} callback - function to apply each item to.
+ * @param {predicateFnUnary} callback - function to apply each item and its index to.
  * @yields {*} item - the next item.
  *
  * @example <caption>takeUntil an item is greater than 3</caption>
@@ -11,15 +11,19 @@
  * // => 1, 2, 3
  */
 
-import Itrabble from "./itrabble"
+import Itrabble from './itrabble';
 
-function *takeUntil<T>(this: Itrabble<T>, callback: (item: T) => boolean) {
-  let taking = true
+function* takeUntil<T>(
+  this: Itrabble<T>,
+  callback: (item: T, index: number) => boolean
+) {
+  let taking = true;
+  let i = 0;
   for (const item of this) {
-    taking = taking && !callback(item)
-    if (!taking) break
-    yield item
+    taking = taking && !callback(item, i++);
+    if (!taking) break;
+    yield item;
   }
 }
 
-export default takeUntil
+export default takeUntil;

@@ -3,9 +3,9 @@ import Itrabble from './itrabble';
  * Reduces iterable collection into single result, yielding each iteration.
  *
  * @generator scan
- * @param {binaryCallback} callback - Callback for memo and item.
+ * @param {binaryCallback} callback - Callback for memo, each item and its index.
  * @param {*} memo - initial value of memo
- * @yields {*} memo - the accumulated result of passing memo and each item
+ * @yields {*} memo - the accumulated result of passing memo, each item and its index
  * to callback.
  *
  * @example <caption>scan to sum items</caption>
@@ -21,13 +21,14 @@ import Itrabble from './itrabble';
  * // => [], [8], [8, 27]
  */
 
-function* scan<T, R>(
+function* scan<T, U>(
   this: Itrabble<T>,
-  callback: (memo: R, item: T) => R,
-  memo: R
+  callback: (memo: U, item: T, index: number) => U,
+  memo: U
 ) {
+  let i = 0;
   for (const item of this) {
-    memo = callback(memo, item);
+    memo = callback(memo, item, i++);
     yield memo;
   }
 }

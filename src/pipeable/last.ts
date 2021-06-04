@@ -1,3 +1,5 @@
+import { PipeableFunction } from '../util-types';
+
 /**
  * Get the last item. -- WARNING: This will iterate through collection
  * until it reaches the end, so do not use on an infinite sequence!
@@ -11,10 +13,12 @@
  * )
  * // => 3
  */
-export function last() {
+export function last<T>(): PipeableFunction<T> {
   return function* (context) {
-    let item
-    for (item of context) { } // eslint-disable-line no-empty
-    yield item
-  }
+    let item: T;
+    for (item of context) {
+    }
+    // @ts-expect-error - expects item to be defined before used
+    yield item;
+  };
 }

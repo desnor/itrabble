@@ -1,3 +1,5 @@
+import { PipeableFunction } from '../util-types';
+
 /**
  * Concatenates any given iterable onto end of itrabble context.
  *
@@ -18,10 +20,13 @@
  * )
  * // => 1, 2, 3, 4, a, b, c, d
  */
-
-export function concat(item) {
+export function concat<
+  T,
+  I extends Iterable<unknown>,
+  IT extends I extends Iterable<infer U> ? U : never
+>(item: I): PipeableFunction<T, T | IT> {
   return function* (context) {
-    yield * context
-    yield * item
-  }
+    yield* context;
+    yield* item as Iterable<IT>;
+  };
 }

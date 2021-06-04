@@ -20,18 +20,18 @@ import Itrabble from './itrabble';
 function* eachChunk<T>(
   this: Itrabble<T>,
   n: number,
-  callback: (...args: T[]) => void
+  callback: (...items: T[]) => void
 ) {
   if (n < 1) throw new RangeError(`Chunk size must be at least 1: ${n} given`);
 
-  let chunk: T[] = [];
+  const chunk: T[] = [];
   for (const item of this) {
     chunk.push(item);
     if (chunk.length === n) {
       callback(...chunk);
-      chunk = [];
+      chunk.splice(0);
     }
-    yield item as T;
+    yield item;
   }
   if (chunk.length > 0) callback(...chunk);
 }

@@ -1,3 +1,5 @@
+import { PipeableFunction } from '../util-types';
+
 /**
  * Filters items that return false from the given predicate function.
  * (opposite of @filter)
@@ -17,14 +19,15 @@
  * )
  * // => 2
  */
-
-export function reject<T>(callback: (item: T, index?: number) => boolean) {
-  return function* (context: Generator<T>) {
-    let index = 0
+export function reject<T>(
+  callback: (item: T, index: number) => boolean
+): PipeableFunction<T> {
+  return function* (context) {
+    let index = 0;
     for (const item of context) {
       if (!callback(item, index++)) {
-        yield item
+        yield item;
       }
     }
-  }
+  };
 }

@@ -1,3 +1,5 @@
+import { PipeableFunction } from '../util-types';
+
 /**
  * Get the first item.
  *
@@ -10,11 +12,11 @@
  * )
  * // => 1
  */
-export function first() {
+export function first<T>(): PipeableFunction<T> {
   return function* (context) {
     for (const item of context) {
-      yield item
-      break
+      yield item;
+      break;
     }
-  }
+  };
 }

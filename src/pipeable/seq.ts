@@ -1,3 +1,5 @@
+import { PipeableFunction } from '../util-types';
+
 /**
  * Yields items in given sequence, with optional starting offset.
  *
@@ -22,13 +24,12 @@
  * )
  * // => 1, 4
  */
-
-export function seq(n, offset = 0) {
+export function seq<T>(n: number, offset = 0): PipeableFunction<T> {
   return function* (context) {
-    let index = 0
+    let index = 0;
     for (const item of context) {
-      if (index % n === offset) yield item
-      index += 1
+      if (index % n === offset) yield item;
+      index += 1;
     }
-  }
+  };
 }

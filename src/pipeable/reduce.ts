@@ -1,3 +1,5 @@
+import { PipeableFunction } from '../util-types';
+
 /**
  * Reduce iterable collection into single yielded result.
  *
@@ -25,11 +27,14 @@
  * )
  * // => [ 8, 27 ]
  */
-
-export function reduce<T, R>(callback: (memo: R, item: T) => R, memo: R) {
-  return function*(context: Generator<T>) {
+export function reduce<T, U>(
+  callback: (memo: U, item: T, index: number) => U,
+  memo: U
+): PipeableFunction<T, U> {
+  return function* (context) {
+    let index = 0;
     for (const item of context) {
-      memo = callback(memo, item);
+      memo = callback(memo, item, index++);
     }
     yield memo;
   };

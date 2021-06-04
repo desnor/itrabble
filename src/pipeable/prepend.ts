@@ -1,3 +1,5 @@
+import { PipeableFunction } from '../util-types';
+
 /**
  * Adds any given values onto start of itrabble context.
  *
@@ -11,10 +13,16 @@
  * )
  * // => 1, 2, 3, 4, a, b, c, d
  */
-
-export function prepend(...items) {
+export function prepend<
+  T,
+  IS extends unknown[],
+  IST extends {
+    [I in keyof IS]: IS[I] extends infer U ? U : unknown;
+  },
+  ISTT extends [...IST]
+>(...items: IS): PipeableFunction<T, T | IST[number]> {
   return function* (context) {
-    yield * items
-    yield * context
-  }
+    yield* items as ISTT;
+    yield* context;
+  };
 }

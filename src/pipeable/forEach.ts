@@ -1,3 +1,5 @@
+import { PipeableFunction } from '../util-types';
+
 /**
  * Callback function that accepts two parameters
  * @function binaryCallback
@@ -23,12 +25,14 @@
  * // => 2: 3
  * // and yields 1, 2, 3
  */
-export function forEach(callback) {
+export function forEach<T>(
+  callback: (item: T, index: number) => void
+): PipeableFunction<T> {
   return function* (context) {
-    let index = 0
+    let index = 0;
     for (const item of context) {
-      callback(item, index++)
-      yield item
+      callback(item, index++);
+      yield item;
     }
-  }
+  };
 }

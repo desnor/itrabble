@@ -1,16 +1,19 @@
 /**
- * Function to return true or false from single argument input.
- * @function predicateFnUnary
- * @param {*} arg
- * @returns {boolean} result - boolean result of arg applied to callback.
+ * Function to return true or false from two argument input.
+ * @function predicateFnBinary
+ * @param {*} item - current item in iteration
+ * @param {number} [index] - optional index of iterated item to use
+ * @returns {boolean} result
  */
+
+import { PipeableFunction } from '../util-types';
 
 /**
  * Skips items until callback first returns true, yielding each thereafter.
  * (inverse of @takeUntil)
  *
  * @generator pipeable skipUntil
- * @param {predicateFnUnary} callback - function to apply each item to.
+ * @param {predicateFnBinary} callback - function to apply each item and index to.
  * @yields {*} item - the next item.
  *
  * @example <caption>skipUntil an item is greater than 3</caption>
@@ -20,12 +23,17 @@
  * // => 4, 5, 4, 3, 2, 1
  */
 
-export function skipUntil(callback) {
+function skipUntil<T>(
+  callback: (item: T, index: number) => boolean
+): PipeableFunction<T> {
   return function* (context) {
-    let skipping = true
+    let skipping = true;
+    let index = 0;
     for (const item of context) {
-      skipping = skipping && !callback(item)
-      if (!skipping) yield item
+      skipping = skipping && !callback(item, index++);
+      if (!skipping) yield item;
     }
-  }
+  };
 }
+
+export { skipUntil };
