@@ -46,8 +46,12 @@
     "ES2015"
   ],
   "ava": {
+    "extensions": {
+      "ts": "module"
+    },
+    "nonSemVerExperiments": {},
     "nodeArguments": [
-      "--experimental-modules"
+      "--loader=ts-node/esm"
     ]
   },
   "author": "Alex Revell <revellalex@gmail.com>",
@@ -66,7 +70,6 @@
       "limit": "10 KB"
     }
   ],
-  "peerDependencies": {},
   "husky": {
     "hooks": {
       "pre-commit": "eslint . --ext .ts",
@@ -81,14 +84,16 @@
   },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.26.0",
+    "@ava/typescript": "^3.0.1",
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
     "@rollup/plugin-typescript": "^8.2.1",
     "@size-limit/preset-small-lib": "^4.10.2",
     "@types/node": "^15.0.1",
+    "@types/sinon": "^10.0.6",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
-    "ava": "^3.15.0",
+    "ava": "4.0.0-rc.1",
     "benchmark": "^2.1.4",
     "coveralls": "^3.0.7",
     "cz-conventional-changelog": "^3.3.0",
@@ -99,7 +104,6 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-typescript": "^0.14.0",
     "husky": "^6.0.0",
-    "ix": "^4.3.1",
     "nyc": "^14.1.1",
     "prettier": "^2.3.0",
     "rollup": "^2.46.0",
@@ -107,6 +111,7 @@
     "rollup-plugin-typescript2": "^0.30.0",
     "sinon": "^10.0.0",
     "size-limit": "^4.10.2",
+    "ts-node": "^10.4.0",
     "tslib": "^2.2.0",
     "typescript": "^4.2.4"
   },
