@@ -29,7 +29,8 @@
     "generate-docs": "jsdoc lib README.md -d docs",
     "size": "size-limit",
     "analyze": "size-limit --why",
-    "lint": "eslint src --ext .ts"
+    "lint": "eslint src --ext .ts",
+    "commit": "cz"
   },
   "repository": {
     "type": "git",
@@ -68,7 +69,8 @@
   "peerDependencies": {},
   "husky": {
     "hooks": {
-      "pre-commit": "eslint . --ext .ts"
+      "pre-commit": "eslint . --ext .ts",
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
     }
   },
   "prettier": {
@@ -79,6 +81,8 @@
   },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.26.0",
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
     "@rollup/plugin-typescript": "^8.2.1",
     "@size-limit/preset-small-lib": "^4.10.2",
     "@types/node": "^15.0.1",
@@ -87,6 +91,7 @@
     "ava": "^3.15.0",
     "benchmark": "^2.1.4",
     "coveralls": "^3.0.7",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.27.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
@@ -104,5 +109,10 @@
     "size-limit": "^4.10.2",
     "tslib": "^2.2.0",
     "typescript": "^4.2.4"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }

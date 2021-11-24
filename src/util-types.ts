@@ -1,6 +1,4 @@
-import Itrabble from './itrabble';
-
-export type ItrabbleSource<T> = Itrabble<T> | Iterable<T> | IterableIterator<T>;
+export type ItrabbleSource<T> = Iterable<T> | IterableIterator<T>;
 
 export type PipeableFunction<T extends unknown, R extends unknown = T> = (
   context: Generator<T>

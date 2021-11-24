@@ -26,7 +26,9 @@ function zipAll<
   IS extends Iterable<unknown>[],
   IST extends [
     ...{
-      [I in keyof IS]: IS[I] extends Iterable<infer U> ? U : unknown;
+      [I in keyof IS]: IS[I] extends Iterable<infer U>
+        ? U | undefined
+        : unknown | undefined;
     }
   ],
   TS extends [T, ...IST]

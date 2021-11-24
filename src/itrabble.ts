@@ -1,27 +1,27 @@
-import eachChunk from './eachChunk';
-import filter from './filter';
-import first from './first';
-import forEach from './forEach';
-import last from './last';
-import map from './map';
-import reduce from './reduce';
-import reject from './reject';
-import scan from './scan';
-import seq from './seq';
-import skip from './skip';
-import skipUntil from './skipUntil';
-import skipWhile from './skipWhile';
-import take from './take';
-import takeUntil from './takeUntil';
-import takeWhile from './takeWhile';
+import eachChunk from './eachChunk.js';
+import filter from './filter.js';
+import first from './first.js';
+import forEach from './forEach.js';
+import last from './last.js';
+import map from './map.js';
+import reduce from './reduce.js';
+import reject from './reject.js';
+import scan from './scan.js';
+import seq from './seq.js';
+import skip from './skip.js';
+import skipUntil from './skipUntil.js';
+import skipWhile from './skipWhile.js';
+import take from './take.js';
+import takeUntil from './takeUntil.js';
+import takeWhile from './takeWhile.js';
 import {
   GetGeneratorType,
   ItrabbleSource,
   PipeableFunction,
 } from './util-types';
-import zip from './zip';
-import zipAll from './zipAll';
-import zipWith from './zipWith';
+import zip from './zip.js';
+import zipAll from './zipAll.js';
+import zipWith from './zipWith.js';
 
 const iterableMethods = {
   eachChunk,
@@ -60,23 +60,25 @@ export interface Itrabble<T>
 export class Itrabble<T> implements Itrabble<T> {
   constructor(context: ItrabbleSource<T>) {
     this.addEnumerables(iterableMethods);
-
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     (this as any)[Symbol.iterator] = context[Symbol.iterator].bind(context);
   }
 
-  addEnumerables(this: Itrabble<T>, iterables: IterableMethods) {
+  private addEnumerables(this: Itrabble<T>, iterables: IterableMethods) {
     Object.entries(iterables).forEach(([name, implementation]) => {
+      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
       (this as any)[name] = this.buildIterator(implementation);
     });
   }
 
-  buildIterator<
+  private buildIterator<
     K extends keyof IterableMethods,
     M extends IterableMethods[K],
     R extends GetGeneratorType<ReturnType<M>>
   >(this: Itrabble<T>, iteratorFunc: M) {
     return (...args: Parameters<M>) =>
       new Itrabble<R>({
+        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
         [Symbol.iterator]: (iteratorFunc as any).bind(this, ...args),
       });
   }
@@ -228,6 +230,7 @@ export class Itrabble<T> implements Itrabble<T> {
     this: IterableIterator<T>,
     ...iteratorFuncs: PipeableFunction<T, unknown>[]
   ) {
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const pipeline = iteratorFuncs.reduce((memo: any, fn) => fn(memo), this);
 
     return new Itrabble(pipeline);

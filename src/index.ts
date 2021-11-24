@@ -1,4 +1,4 @@
-import Itrabble from './itrabble';
+import Itrabble from './itrabble.js';
 import { ItrabbleSource } from './util-types';
 
 /**
@@ -6,7 +6,7 @@ import { ItrabbleSource } from './util-types';
  * @param {ItrabbleSource<T>} source
  */
 export function from<T>(source: ItrabbleSource<T>) {
-  if (source instanceof Itrabble) return source;
+  if (source instanceof Itrabble) return source as Itrabble<T>;
 
   return new Itrabble(source);
 }
@@ -20,5 +20,3 @@ export function from<T>(source: ItrabbleSource<T>) {
 export function of<T>(...values: T[]) {
   return new Itrabble(values);
 }
-
-export { Itrabble };

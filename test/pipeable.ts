@@ -55,14 +55,14 @@ test('concat', (t) => {
 test('first', (t) => {
   const expectedResult = 'a';
   const arrayStringsIt = from(arrayStrings);
-  t.deepEqual(...arrayStringsIt.pipe(first()), expectedResult);
+  t.deepEqual([...arrayStringsIt.pipe(first())][0], expectedResult);
 });
 
 test('last', (t) => {
   const expectedResult = 'd';
   const arrayStringsIt = from(arrayStrings);
 
-  t.deepEqual(...arrayStringsIt.pipe(last()), expectedResult);
+  t.deepEqual([...arrayStringsIt.pipe(last())][0], expectedResult);
 });
 
 test('take', (t) => {
@@ -121,7 +121,9 @@ test('skip', (t) => {
 });
 
 test('forEach', (t) => {
-  const log = sinon.stub().returns((x) => x);
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  const log = sinon.stub().returns((x: any) => x);
+
   const expectedResult = ['a', 'b', 'c', 'd'];
   const arrayStringsIt = from(arrayStrings);
 
@@ -136,7 +138,9 @@ test('forEach', (t) => {
 
 // /* ***** eachChunk/ ***** */
 test('eachChunk with even n chunks', (t) => {
-  const log = sinon.stub().returns((x) => x);
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  const log = sinon.stub().returns((x: any) => x);
+
   const expectedResult = ['a', 'b', 'c', 'd'];
   const arrayStringsIt = from(arrayStrings);
 
@@ -148,7 +152,9 @@ test('eachChunk with even n chunks', (t) => {
 });
 
 test('eachChunk with odd n chunks', (t) => {
-  const log = sinon.stub().returns((x) => x);
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  const log = sinon.stub().returns((x: any) => x);
+
   const expectedResult = ['a', 'b', 'c', 'd'];
   const oddChunks = 3;
   const arrayStringsIt = from(arrayStrings);
@@ -164,14 +170,16 @@ test('eachChunk with odd n chunks', (t) => {
 });
 
 test('eachChunk with illegal chunk size throws error', (t) => {
-  const log = sinon.stub().returns((x) => x);
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  const log = sinon.stub().returns((x: any) => x);
+
   const n = -1;
   const expectedError = `Chunk size must be at least 1: ${n} given`;
   const arrayStringsIt = from(arrayStrings);
 
   const error = t.throws(() => [...arrayStringsIt.pipe(eachChunk(n, log))], {
     instanceOf: RangeError,
-  });
+  }) as Error;
 
   t.is(error.message, expectedError);
 });
@@ -244,7 +252,7 @@ test('scan', (t) => {
 });
 
 test('zip', (t) => {
-  const expectedResult = [
+  const expectedResult: ['a' | 'b' | 'c' | 'd', 1 | 2 | 3 | 4][] = [
     ['a', 1],
     ['b', 2],
     ['c', 3],
@@ -256,14 +264,15 @@ test('zip', (t) => {
 });
 
 test('zipAll', (t) => {
-  const expectedResult = [
+  const expectedResult: [string, number | undefined][] = [
     ['a', 1],
     ['b', 2],
     ['c', 3],
     ['d', 4],
     ['e', undefined],
   ];
-  const arrayStringsIt = from(arrayStrings.concat(['e']));
+
+  const arrayStringsIt = from(arrayStrings.concat('e'));
 
   t.deepEqual([...arrayStringsIt.pipe(zipAll(arrayNums))], expectedResult);
 });
