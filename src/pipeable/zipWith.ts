@@ -25,8 +25,8 @@ import { PipeableFunction } from '../util-types';
  */
 
 function zipWith<
-  T extends unknown,
-  R extends unknown,
+  T,
+  R,
   IS extends Iterable<unknown>[],
   IST extends [
     ...{

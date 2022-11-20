@@ -25,6 +25,7 @@ import {
   zip,
   zipAll,
   zipWith,
+  cycle,
 } from '../src/pipeable/index.js';
 
 const arrayStrings = ['a', 'b', 'c', 'd'];
@@ -50,6 +51,12 @@ test('concat', (t) => {
   const arrayNumsIt = from(arrayNums);
   const arrayStringsIt = from(arrayStrings);
   t.deepEqual([...arrayNumsIt.pipe(concat(arrayStringsIt))], expectedResult);
+});
+
+test('cycle', (t) => {
+  const expectedResult = [1, 2, 3, 4, 1, 2, 3, 4];
+  const arrayNumsIt = from(arrayNums);
+  t.deepEqual([...arrayNumsIt.pipe(cycle(2))], expectedResult);
 });
 
 test('first', (t) => {

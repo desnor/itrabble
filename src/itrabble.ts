@@ -1,86 +1,48 @@
-import eachChunk from './eachChunk.js';
-import filter from './filter.js';
-import first from './first.js';
-import forEach from './forEach.js';
-import last from './last.js';
-import map from './map.js';
-import reduce from './reduce.js';
-import reject from './reject.js';
-import scan from './scan.js';
-import seq from './seq.js';
-import skip from './skip.js';
-import skipUntil from './skipUntil.js';
-import skipWhile from './skipWhile.js';
-import take from './take.js';
-import takeUntil from './takeUntil.js';
-import takeWhile from './takeWhile.js';
-import {
-  GetGeneratorType,
-  ItrabbleSource,
-  PipeableFunction,
-} from './util-types';
-import zip from './zip.js';
-import zipAll from './zipAll.js';
-import zipWith from './zipWith.js';
+import { ItrabbleSource, PipeableFunction } from './util-types';
 
-const iterableMethods = {
-  eachChunk,
-  filter,
-  first,
-  forEach,
-  last,
-  map,
-  reduce,
-  reject,
-  scan,
-  seq,
-  skip,
-  skipUntil,
-  skipWhile,
-  take,
-  takeUntil,
-  takeWhile,
-  zip,
-  zipAll,
-  zipWith,
-} as const;
-
-export type IterableMethods = typeof iterableMethods;
-
-export type ItrabbleBoundMethods = {
-  [M in keyof IterableMethods]: (
-    ...args: Parameters<IterableMethods[M]>
-  ) => Itrabble<GetGeneratorType<ReturnType<IterableMethods[M]>>>;
-};
-
-export interface Itrabble<T>
-  extends IterableIterator<T>,
-    ItrabbleBoundMethods {}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface Itrabble<T> extends IterableIterator<T> {}
 
 export class Itrabble<T> implements Itrabble<T> {
   constructor(context: ItrabbleSource<T>) {
-    this.addEnumerables(iterableMethods);
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     (this as any)[Symbol.iterator] = context[Symbol.iterator].bind(context);
   }
 
-  private addEnumerables(this: Itrabble<T>, iterables: IterableMethods) {
-    Object.entries(iterables).forEach(([name, implementation]) => {
-      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-      (this as any)[name] = this.buildIterator(implementation);
-    });
+  /**
+   * Get the first item.
+   *
+   * @function first
+   * @returns {*} item - the first item.
+   *
+   * @example <caption>Example usage of first</caption>
+   * itrabble([1,2,3]).first
+   * // => 1
+   */
+  get first() {
+    for (const item of this) {
+      return item;
+    }
+    return;
   }
 
-  private buildIterator<
-    K extends keyof IterableMethods,
-    M extends IterableMethods[K],
-    R extends GetGeneratorType<ReturnType<M>>
-  >(this: Itrabble<T>, iteratorFunc: M) {
-    return (...args: Parameters<M>) =>
-      new Itrabble<R>({
-        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-        [Symbol.iterator]: (iteratorFunc as any).bind(this, ...args),
-      });
+  /**
+   * Get the last item. -- WARNING: This will iterate through collection
+   * until it reaches the end, so do not use on an infinite sequence!
+   *
+   * @function last
+   * @returns {*} item - the last item.
+   *
+   * @example <caption>Example usage of last</caption>
+   * itrabble([1,2,3]).last
+   * // => 3
+   */
+  get last() {
+    let item: T | undefined;
+    // eslint-disable-next-line no-empty
+    for (item of this) {
+    }
+    return item;
   }
 
   /**
@@ -94,16 +56,15 @@ export class Itrabble<T> implements Itrabble<T> {
    * // => an iterable sequence yielding: { 1, 2, 3, 4, 5 }
    * @example <caption>toArray invokes itrabble sequence, converting result
    * into an array</caption>
-   * itrabble([1,2,3,4,5]).map(x => x * x).take(4).toArray()
+   * itrabble([1,2,3,4,5]).pipe(map(x => x * x), take(4)).toArray
    * // => an array: [1, 4, 9, 16]
    */
-  toArray() {
+  get toArray() {
     return Array.from(this);
   }
 
   /**
    * Converts iterable sequence into a Map, invoking any prior transforms.
-   * Optional formatFn can be given to return a specific format for the Map.
    *
    * @function toMap
    * @returns {Map} - the iterated context invoked and formatted into a Map.
@@ -112,16 +73,14 @@ export class Itrabble<T> implements Itrabble<T> {
    * itrabble([[1,2],[3,4],5])
    * // => an iterable sequence yielding: { [1, 2], [3, 4], 5 }
    * @example <caption>calling toMap on a malformed map shape throws error</caption>
-   * itrabble([[1,2],[3,4],5]).toMap()
+   * itrabble([[1,2],[3,4],5]).toMap
    * // => TypeError: Iterator value 5 is not an entry object
-   * @example <caption>toMap when no formatFn given</caption>
-   * itrabble([[1,2],[3,4],5]).take(2).toMap()
+   * @example <caption>toMap returns Map of itrabble sequence pairs</caption>
+   * itrabble([[1,2],[3,4],5]).pipe(take(2)).toMap
    * // => new Map { 1 => 2, 3 => 4 }
    */
-  toMap<U extends [unknown, unknown] | readonly [unknown, unknown]>(
-    this: Itrabble<U>
-  ): Map<U[0], U[1]> {
-    return new Map(this);
+  get toMap(): T extends [infer A, infer B] ? Map<A, B> : never {
+    return new Map(this as any) as any;
   }
 
   /**
@@ -134,13 +93,13 @@ export class Itrabble<T> implements Itrabble<T> {
    * itrabble([1,2,3,4,5,4,3,2,1])
    * // => an iterable sequence yielding: { 1, 2, 3, 4, 5, 4, 3, 2, 1 }
    * @example <caption>toSet converts straight into a Set</caption>
-   * itrabble([1,2,3,4,5,4,3,2,1]).toSet()
+   * itrabble([1,2,3,4,5,4,3,2,1]).toSet
    * // => Set { 1, 2, 3, 4, 5}
    * @example <caption>toSet invokes transforms before converting into Set</caption>
-   * itrabble([[1,2],[3,4],[5,4],[3,2],1]).take(2).toSet()
+   * itrabble([[1,2],[3,4],[5,4],[3,2],1]).pipe(take(2)).toSet
    * // => Set { [ 1, 2 ], [ 3, 4 ] }
    */
-  toSet() {
+  get toSet() {
     return new Set(this);
   }
 

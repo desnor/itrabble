@@ -22,7 +22,7 @@ import { PipeableFunction } from '../util-types';
  */
 
 function zipAll<
-  T extends unknown,
+  T,
   IS extends Iterable<unknown>[],
   IST extends [
     ...{
