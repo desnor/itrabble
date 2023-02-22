@@ -6,12 +6,27 @@
   "main": "dist/commonjs/index.js",
   "module": "dist/index.js",
   "exports": {
-    ".": "./dist/index.js",
-    "./pipeable": "./dist/pipeable/index.js",
-    "./commonjs": "./dist/commonjs/index.js",
-    "./commonjs/pipeable": "./dist/commonjs/pipeable/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/commonjs/index.js"
+    },
+    "./pipeable": {
+      "types": "./dist/pipeable/index.d.ts",
+      "import": "./dist/pipeable/index.js",
+      "require": "./dist/commonjs/pipeable/index.js"
+    }
   },
-  "types": "dist/*.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "dist/index.d.ts"
+      ],
+      "./pipeable": [
+        "dist/pipeable/index.d.ts"
+      ]
+    }
+  },
   "files": [
     "dist"
   ],
