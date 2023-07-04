@@ -3,9 +3,9 @@ import { PipeableFunction } from '../util-types';
 /**
  * Callback function that accepts two parameters
  * @function binaryCallback
- * @param {*} firstArg
- * @param {*} secondArg
- * @returns {*} result - result of firstArg and secondArg applied to callback.
+ * @param {*} item
+ * @param {number} index
+ * @returns {*} result - result of item and index applied to callback.
  */
 
 /**

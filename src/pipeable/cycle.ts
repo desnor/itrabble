@@ -1,28 +1,27 @@
 import { PipeableFunction } from '../util-types';
 
 /**
- * Concatenates any given iterable onto end of itrabble context.
+ * Yields values from current iterable context repeatedly for the given number of times, default to infinite.
  *
- * @generator pipeable concat
- * @param {*} item - iterable item to add onto end of iterated sequence.
- * @yields {*} value - the next value of the combined iterable sequence.
+ * @generator pipeable cycle
+ * @param {number} repeats - number of times to repeat iteration of given context.
+ * @yields {*} value - the next value of the iterable sequence.
  *
- * @example <caption>concat array of letters onto itrabble of numbers</caption>
+ * @example <caption>yield values for the given iterable twice</caption>
  * itrabble([1,2,3,4]).pipe(
- *  concat(['a','b','c','d'])
+ *  cycle(2)
  * )
- * // => 1, 2, 3, 4, a, b, c, d
+ * // => 1, 2, 3, 4, 1, 2, 3, 4
  *
- * @example <caption>concat itrabble of letters onto itrabble of numbers</caption>
- * const lettersIt = itrabble(['a','b','c','d'])
+ * @example <caption>yield values for the given itrabble infinitely</caption>
  * itrabble([1,2,3,4]).pipe(
- *  concat(lettersIt)
+ *  cycle()
  * )
- * // => 1, 2, 3, 4, a, b, c, d
+ * // => 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4 // .... will iterate forever
  */
 
-export function cycle<T>(n?: number): PipeableFunction<T, T> {
-  let i = n ?? Infinity;
+export function cycle<T>(n = Infinity): PipeableFunction<T, T> {
+  let i = n;
   return function* cyc(context): Generator<T> {
     while (i-- > 0) {
       for (const item of context) {
