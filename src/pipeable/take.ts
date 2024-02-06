@@ -1,4 +1,4 @@
-import { PipeableFunction } from '../util-types';
+import type { PipeableFunction } from '../util-types';
 
 /**
  * Yields given count of items, optionally offset by given index.

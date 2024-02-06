@@ -6,7 +6,7 @@
  * @returns {boolean} result
  */
 
-import { PipeableFunction } from '../util-types';
+import type { PipeableFunction } from '../util-types';
 
 /**
  * Skips items until callback first returns true, yielding each thereafter.

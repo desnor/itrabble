@@ -1,4 +1,4 @@
-import { PipeableFunction } from '../util-types';
+import type { PipeableFunction } from '../util-types';
 
 /**
  * Filters items that return true from the given predicate function.

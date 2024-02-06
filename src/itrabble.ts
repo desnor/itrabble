@@ -19,7 +19,7 @@ export class Itrabble<T> implements Itrabble<T> {
    * itrabble([1,2,3]).first
    * // => 1
    */
-  get first() {
+  get first(): T | undefined {
     for (const item of this) {
       return item;
     }
@@ -37,8 +37,8 @@ export class Itrabble<T> implements Itrabble<T> {
    * itrabble([1,2,3]).last
    * // => 3
    */
-  get last() {
-    let item: T | undefined;
+  get last(): T | undefined {
+    let item;
     // eslint-disable-next-line no-empty
     for (item of this) {
     }
@@ -79,8 +79,8 @@ export class Itrabble<T> implements Itrabble<T> {
    * itrabble([[1,2],[3,4],5]).pipe(take(2)).toMap
    * // => new Map { 1 => 2, 3 => 4 }
    */
-  get toMap(): T extends [infer A, infer B] ? Map<A, B> : never {
-    return new Map(this as any) as any;
+  get toMap(): T extends [infer K, infer V] ? Map<K, V> : never {
+    return new Map(this as never) as never;
   }
 
   /**

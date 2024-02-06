@@ -1,4 +1,4 @@
-import { PipeableFunction } from '../util-types';
+import type { PipeableFunction } from '../util-types';
 
 /**
  * Reduce iterable collection into single yielded result.

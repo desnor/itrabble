@@ -1,4 +1,4 @@
-import { PipeableFunction } from '../util-types';
+import type { PipeableFunction } from '../util-types';
 
 /**
  * Zips iterated collection with any given iterables.

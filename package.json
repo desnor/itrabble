@@ -2,44 +2,30 @@
   "name": "itrabble",
   "version": "2.0.0-rc.1",
   "description": "Library to add useful methods to JavaScript iterables eg. Array, Map, Set, String, TypedArray",
-  "browser": "dist/index.umd.js",
-  "main": "dist/commonjs/index.js",
+  "main": "dist/commonjs/index.cjs",
   "module": "dist/index.js",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/commonjs/index.js"
-    },
-    "./pipeable": {
-      "types": "./dist/pipeable/index.d.ts",
-      "import": "./dist/pipeable/index.js",
-      "require": "./dist/commonjs/pipeable/index.js"
-    }
-  },
-  "typesVersions": {
-    "*": {
-      ".": [
-        "dist/index.d.ts"
-      ],
-      "./pipeable": [
-        "dist/pipeable/index.d.ts"
-      ]
-    }
-  },
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
   "type": "module",
   "engines": {
-    "node": ">=10"
+    "node": ">=18"
   },
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "build": "rollup -c",
-    "prepublishOnly": "rollup -c && npm t",
+    "build": "tsup src/index.ts --dts --format esm,cjs",
+    "types:check": "tsc --noEmit src/index.ts",
+    "prepublishOnly": "npm test",
     "start": "tsc -w",
-    "test": "nyc ava",
+    "test": "npm run build && nyc ava",
     "test:watch": "ava -w",
     "generate-docs": "jsdoc lib README.md -d docs",
     "size": "size-limit",
@@ -60,15 +46,6 @@
     "iterator",
     "ES2015"
   ],
-  "ava": {
-    "extensions": {
-      "ts": "module"
-    },
-    "nonSemVerExperiments": {},
-    "nodeArguments": [
-      "--loader=ts-node/esm"
-    ]
-  },
   "author": "Alex Revell <revellalex@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -77,11 +54,11 @@
   "homepage": "https://github.com/desnor/itrabble#readme",
   "size-limit": [
     {
-      "path": "dist/index.umd.js",
+      "path": "dist/index.js",
       "limit": "10 KB"
     },
     {
-      "path": "commonjs/index.js",
+      "path": "dist/index.cjs",
       "limit": "10 KB"
     }
   ],
@@ -98,17 +75,14 @@
     "trailingComma": "es5"
   },
   "devDependencies": {
-    "@ampproject/rollup-plugin-closure-compiler": "^0.26.0",
-    "@ava/typescript": "^3.0.1",
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
-    "@rollup/plugin-typescript": "^8.2.1",
     "@size-limit/preset-small-lib": "^4.10.2",
     "@types/node": "^15.0.1",
     "@types/sinon": "^10.0.6",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
-    "ava": "4.0.0-rc.1",
+    "ava": "^4.0.0-rc.1",
     "benchmark": "^2.1.4",
     "coveralls": "^3.0.7",
     "cz-conventional-changelog": "^3.3.0",
@@ -121,14 +95,11 @@
     "husky": "^6.0.0",
     "nyc": "^14.1.1",
     "prettier": "^2.3.0",
-    "rollup": "^2.46.0",
-    "rollup-plugin-multi-entry": "^2.1.0",
-    "rollup-plugin-typescript2": "^0.30.0",
     "sinon": "^10.0.0",
     "size-limit": "^4.10.2",
-    "ts-node": "^10.4.0",
     "tslib": "^2.2.0",
-    "typescript": "^4.2.4"
+    "tsup": "^7.2.0",
+    "typescript": "^5.1.6"
   },
   "config": {
     "commitizen": {

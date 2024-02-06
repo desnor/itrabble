@@ -1,4 +1,4 @@
-import { PipeableFunction } from '../util-types';
+import type { PipeableFunction } from '../util-types';
 
 /**
  * Yields values from current iterable context repeatedly for the given number of times, default to infinite.

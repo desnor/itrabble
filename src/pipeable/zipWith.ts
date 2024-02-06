@@ -5,7 +5,7 @@
  * @returns {*} result - result of applying args to callback.
  */
 
-import { PipeableFunction } from '../util-types';
+import type { PipeableFunction } from '../util-types';
 
 /**
  * Zips iterated collection with any other given iterables, applying values from each
@@ -24,7 +24,7 @@ import { PipeableFunction } from '../util-types';
  * // => '1a', '2b', '3c', '4d'
  */
 
-function zipWith<
+export function zipWith<
   T,
   R,
   IS extends Iterable<unknown>[],
@@ -48,5 +48,3 @@ function zipWith<
     }
   };
 }
-
-export { zipWith };

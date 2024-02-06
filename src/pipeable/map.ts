@@ -22,7 +22,7 @@
  * // => '1', '2', '3'
  */
 
-import { PipeableFunction } from '../util-types';
+import type { PipeableFunction } from '../util-types';
 
 export function map<T, R>(
   mapFn: (item: T, index: number) => R

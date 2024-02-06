@@ -26,7 +26,7 @@
  * // => [], [8], [8, 27]
  */
 
-import { PipeableFunction } from '../util-types';
+import type { PipeableFunction } from '../util-types';
 
 export function scan<T, U>(
   callback: (memo: U, item: T, index: number) => U,

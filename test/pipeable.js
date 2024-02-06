@@ -1,14 +1,15 @@
 import test from 'ava';
 import sinon from 'sinon';
 
-import { from } from '../src/index.js';
 import {
   append,
   concat,
-  first,
+  cycle,
   eachChunk,
   filter,
+  first,
   forEach,
+  from,
   last,
   map,
   prepend,
@@ -25,8 +26,7 @@ import {
   zip,
   zipAll,
   zipWith,
-  cycle,
-} from '../src/pipeable/index.js';
+} from '../dist/index.js';
 
 const arrayStrings = ['a', 'b', 'c', 'd'];
 const arrayNums = [1, 2, 3, 4];
@@ -128,8 +128,7 @@ test('skip', (t) => {
 });
 
 test('forEach', (t) => {
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  const log = sinon.stub().returns((x: any) => x);
+  const log = sinon.stub().returns((x) => x);
 
   const expectedResult = ['a', 'b', 'c', 'd'];
   const arrayStringsIt = from(arrayStrings);
@@ -143,10 +142,8 @@ test('forEach', (t) => {
   t.is(log.calledWith('d'), true);
 });
 
-// /* ***** eachChunk/ ***** */
 test('eachChunk with even n chunks', (t) => {
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  const log = sinon.stub().returns((x: any) => x);
+  const log = sinon.stub().returns((x) => x);
 
   const expectedResult = ['a', 'b', 'c', 'd'];
   const arrayStringsIt = from(arrayStrings);
@@ -159,8 +156,7 @@ test('eachChunk with even n chunks', (t) => {
 });
 
 test('eachChunk with odd n chunks', (t) => {
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  const log = sinon.stub().returns((x: any) => x);
+  const log = sinon.stub().returns((x) => x);
 
   const expectedResult = ['a', 'b', 'c', 'd'];
   const oddChunks = 3;
@@ -177,8 +173,7 @@ test('eachChunk with odd n chunks', (t) => {
 });
 
 test('eachChunk with illegal chunk size throws error', (t) => {
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  const log = sinon.stub().returns((x: any) => x);
+  const log = sinon.stub().returns((x) => x);
 
   const n = -1;
   const expectedError = `Chunk size must be at least 1: ${n} given`;
@@ -186,7 +181,7 @@ test('eachChunk with illegal chunk size throws error', (t) => {
 
   const error = t.throws(() => [...arrayStringsIt.pipe(eachChunk(n, log))], {
     instanceOf: RangeError,
-  }) as Error;
+  });
 
   t.is(error.message, expectedError);
 });
@@ -259,7 +254,7 @@ test('scan', (t) => {
 });
 
 test('zip', (t) => {
-  const expectedResult: ['a' | 'b' | 'c' | 'd', 1 | 2 | 3 | 4][] = [
+  const expectedResult = [
     ['a', 1],
     ['b', 2],
     ['c', 3],
@@ -271,7 +266,7 @@ test('zip', (t) => {
 });
 
 test('zipAll', (t) => {
-  const expectedResult: [string, number | undefined][] = [
+  const expectedResult = [
     ['a', 1],
     ['b', 2],
     ['c', 3],

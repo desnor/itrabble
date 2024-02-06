@@ -1,12 +1,12 @@
 import test from 'ava';
-import { of, from } from '../src/index.js';
+import { from, of } from '../dist/index.js';
 
-const arrayStrings = ['a', 'b', 'c', 'd'] as const;
+const arrayStrings = ['a', 'b', 'c', 'd'];
 const mapStrings = new Map([
   ['a', 'A'],
   ['b', 'B'],
   ['c', 'C'],
-] as const);
+]);
 
 const arrayStringsIt = from(arrayStrings);
 const mapStringsIt = from(mapStrings);
@@ -55,3 +55,5 @@ test('last', (t) => {
 
   t.deepEqual(arrayStringsIt.last, expectedResult);
 });
+
+

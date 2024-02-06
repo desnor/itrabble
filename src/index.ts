@@ -1,5 +1,6 @@
 import Itrabble from './itrabble.js';
 import { ItrabbleSource } from './util-types';
+export * from './pipeable/index.js';
 
 /**
  * Accepts any iterable as a source.
