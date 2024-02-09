@@ -3,6 +3,7 @@ import { ItrabbleSource, PipeableFunction } from './util-types';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Itrabble<T> extends IterableIterator<T> {}
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class Itrabble<T> implements Itrabble<T> {
   constructor(context: ItrabbleSource<T>) {
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
