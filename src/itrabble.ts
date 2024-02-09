@@ -17,7 +17,7 @@ export class Itrabble<T> implements Itrabble<T> {
    * @returns {*} item - the first item.
    *
    * @example <caption>Example usage of first</caption>
-   * itrabble([1,2,3]).first
+   * from([1,2,3]).first
    * // => 1
    */
   get first(): T | undefined {
@@ -35,7 +35,7 @@ export class Itrabble<T> implements Itrabble<T> {
    * @returns {*} item - the last item.
    *
    * @example <caption>Example usage of last</caption>
-   * itrabble([1,2,3]).last
+   * from([1,2,3]).last
    * // => 3
    */
   get last(): T | undefined {
@@ -53,11 +53,11 @@ export class Itrabble<T> implements Itrabble<T> {
    * @returns {Array} - the iterated context as an array.
    *
    * @example <caption>an `itrabble` is an iterable over the given values</caption>
-   * itrabble([1,2,3,4,5])
+   * from([1,2,3,4,5])
    * // => an iterable sequence yielding: { 1, 2, 3, 4, 5 }
    * @example <caption>toArray invokes itrabble sequence, converting result
    * into an array</caption>
-   * itrabble([1,2,3,4,5]).pipe(map(x => x * x), take(4)).toArray
+   * from([1,2,3,4,5]).pipe(map(x => x * x), take(4)).toArray
    * // => an array: [1, 4, 9, 16]
    */
   get toArray() {
@@ -71,13 +71,13 @@ export class Itrabble<T> implements Itrabble<T> {
    * @returns {Map} - the iterated context invoked and formatted into a Map.
    *
    * @example <caption>an `itrabble` is an iterable over the given values</caption>
-   * itrabble([[1,2],[3,4],5])
+   * from([[1,2],[3,4],5])
    * // => an iterable sequence yielding: { [1, 2], [3, 4], 5 }
    * @example <caption>calling toMap on a malformed map shape throws error</caption>
-   * itrabble([[1,2],[3,4],5]).toMap
+   * from([[1,2],[3,4],5]).toMap
    * // => TypeError: Iterator value 5 is not an entry object
    * @example <caption>toMap returns Map of itrabble sequence pairs</caption>
-   * itrabble([[1,2],[3,4],5]).pipe(take(2)).toMap
+   * from([[1,2],[3,4],5]).pipe(take(2)).toMap
    * // => new Map { 1 => 2, 3 => 4 }
    */
   get toMap(): T extends [infer K, infer V] ? Map<K, V> : never {
@@ -91,13 +91,13 @@ export class Itrabble<T> implements Itrabble<T> {
    * @returns {Set} - the iterated context invoked and formatted into a Set.
    *
    * @example <caption>an `itrabble` is an iterable over the given values</caption>
-   * itrabble([1,2,3,4,5,4,3,2,1])
+   * from([1,2,3,4,5,4,3,2,1])
    * // => an iterable sequence yielding: { 1, 2, 3, 4, 5, 4, 3, 2, 1 }
    * @example <caption>toSet converts straight into a Set</caption>
-   * itrabble([1,2,3,4,5,4,3,2,1]).toSet
+   * from([1,2,3,4,5,4,3,2,1]).toSet
    * // => Set { 1, 2, 3, 4, 5}
    * @example <caption>toSet invokes transforms before converting into Set</caption>
-   * itrabble([[1,2],[3,4],[5,4],[3,2],1]).pipe(take(2)).toSet
+   * from([[1,2],[3,4],[5,4],[3,2],1]).pipe(take(2)).toSet
    * // => Set { [ 1, 2 ], [ 3, 4 ] }
    */
   get toSet() {
