@@ -1,5 +1,5 @@
 export type ItrabbleSource<T> = Iterable<T> | IterableIterator<T>;
 
-export type PipeableFunction<T extends unknown, R extends unknown = T> = (
+export type PipeableFunction<T, R = T> = (
   context: Generator<T>
 ) => Generator<R>;

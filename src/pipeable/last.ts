@@ -16,6 +16,7 @@ import type { PipeableFunction } from '../util-types';
 export function last<T>(): PipeableFunction<T> {
   return function* (context) {
     let item: T;
+    // eslint-disable-next-line no-empty
     for (item of context) {
     }
     // @ts-expect-error - expects item to be defined before used
