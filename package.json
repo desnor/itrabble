@@ -1,6 +1,6 @@
 {
   "name": "itrabble",
-  "version": "2.0.0-rc.1",
+  "version": "2.0.0-rc.2",
   "description": "Library to add useful methods to JavaScript iterables eg. Array, Map, Set, String, TypedArray",
   "main": "dist/commonjs/index.cjs",
   "module": "dist/index.js",
