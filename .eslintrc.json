@@ -1,22 +1,27 @@
 {
-  "parser": "",
+  "root": true,
+  "parser": "@typescript-eslint/parser",
   "env": {
-    "browser": false,
-    "commonjs": true,
+    "browser": true,
+    "commonjs": false,
     "es6": true,
-    "node": true,
-    "mocha": true
+    "node": true
   },
-  "extends": "eslint:recommended",
+  "extends": [
+    "eslint:recommended",
+    "prettier",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "parserOptions": {
     "ecmaVersion": 6,
     "ecmaFeatures": {
-        "experimentalObjectRestSpread": false,
-        "modules": true
+      "experimentalObjectRestSpread": true,
+      "modules": true
     },
     "sourceType": "module"
   },
-  "plugins": [],
+  "plugins": ["@typescript-eslint", "prettier"],
   "globals": {
     "expect": true,
     "jest": true
@@ -24,10 +29,13 @@
   "rules": {
     "indent": ["error", 2],
     "comma-dangle": ["error", "only-multiline"],
-    "linebreak-style": ["error","unix"],
-    "quotes": ["error","single"],
-    "strict" : 0,
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "single"],
+    "strict": 0,
     "no-console": 2,
-    "prefer-const": ["error", {"destructuring": "all"}]
+    "require-yield": 0,
+    "no-empty": 1,
+    "prefer-const": ["error", { "destructuring": "all" }],
+    "@typescript-eslint/explicit-module-boundary-types": "off"
   }
 }

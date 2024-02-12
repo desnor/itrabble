@@ -1,10 +1,10 @@
 test/
-esm/
+
+.github/
 .nyc_output/
-
-test-script.js
-rollup.config.js
-
+.husky/
+.vs-code/
 .nvmrc
 .eslintrc.json
+.eslintignore
 .travis.yml

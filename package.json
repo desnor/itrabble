@@ -2,26 +2,36 @@
   "name": "itrabble",
   "version": "2.0.0-rc.1",
   "description": "Library to add useful methods to JavaScript iterables eg. Array, Map, Set, String, TypedArray",
-  "browser": "dist/index.umd.js",
-  "main": "commonjs/index.js",
-  "module": "lib/index.js",
+  "main": "dist/commonjs/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "exports": {
-    ".": "./lib/index.js",
-    "./pipeable/": "./lib/pipeable/",
-    "./commonjs": "./commonjs/index.js",
-    "./commonjs/pipeable": "./commonjs/pipeable/index.js"
+    ".": {
+      "default": "./dist/index.js",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
   },
   "type": "module",
   "engines": {
-    "node": ">=6.11.1"
+    "node": ">=18"
   },
   "scripts": {
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "build": "rollup -c",
-    "prepublishOnly": "rollup -c && npm t",
-    "test": "nyc ava",
+    "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
+    "build": "tsup src/index.ts --dts --format esm,cjs",
+    "types:check": "tsc --noEmit src/index.ts",
+    "prepublishOnly": "npm test",
+    "start": "tsc -w",
+    "test": "npm run build && nyc ava",
     "test:watch": "ava -w",
-    "generate-docs": "jsdoc lib README.md -d docs"
+    "generate-docs": "jsdoc lib README.md -d docs",
+    "size": "size-limit",
+    "analyze": "size-limit --why",
+    "lint": "eslint src --ext .ts",
+    "commit": "cz"
   },
   "repository": {
     "type": "git",
@@ -36,25 +46,62 @@
     "iterator",
     "ES2015"
   ],
-  "ava": {
-    "nodeArguments": [
-      "--experimental-modules"
-    ]
-  },
   "author": "Alex Revell <revellalex@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/desnor/itrabble/issues"
   },
   "homepage": "https://github.com/desnor/itrabble#readme",
-  "devDependencies": {
-    "@ampproject/rollup-plugin-closure-compiler": "^0.26.0",
-    "ava": "^3.13.0",
-    "coveralls": "^3.0.7",
-    "nyc": "^14.1.1",
-    "rollup": "^1.25.0",
-    "rollup-plugin-multi-entry": "^2.1.0",
-    "sinon": "^7.5.0"
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "2 kB"
+    },
+    {
+      "path": "dist/index.cjs",
+      "limit": "2 kB"
+    }
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "eslint . --ext .ts",
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
+    }
   },
-  "dependencies": {}
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
+    "@size-limit/preset-small-lib": "^11.0.2",
+    "@types/node": "^20.11.16",
+    "@types/sinon": "^17.0.3",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "ava": "^4.0.0-rc.1",
+    "benchmark": "^2.1.4",
+    "coveralls": "^3.1.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "husky": "^6.0.0",
+    "nyc": "^14.1.1",
+    "prettier": "^3.2.5",
+    "sinon": "^17.0.1",
+    "size-limit": "^11.0.2",
+    "tslib": "^2.6.2",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
