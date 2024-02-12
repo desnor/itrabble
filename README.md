@@ -5,13 +5,19 @@
 
 [![NPM](https://nodei.co/npm/itrabble.png)](https://npmjs.org/package/itrabble)
 
-[![NPM](https://img.shields.io/npm/dt/express.svg)](https://www.npmjs.com/package/itrabble)
+[![NPM](https://img.shields.io/npm/dt/itrabble.svg)](https://www.npmjs.com/package/itrabble)
 
 ## Library to extend JavaScript ES6 iterables
 
 ### [Examples](#examples-1)
 
 ### [API Documentation](https://github.com/desnor/itrabble/wiki)
+
+### Features
+* **small** 920 bytes (ESM) with all dependencies, minified and brotlied.
+* No dependencies.
+* hand-crafted by single artisan developer - not mass produced by large corporation-backed open-source team.
+* fun name to reference in your project dependencies
 
 ### Why?
 
@@ -24,8 +30,6 @@ I wrote this mainly as a fun exercise for myself and a way to learn about the ES
 ### Requirements
 
 For a Node environment, you'll need a node version of at least 6.11.1 because this library uses a large number of the features introduced in ES2015 (iterators, generator functions, and rest/spread operators to name a few).
-
-For browser usage, you may need to use a transpiler like [Babel](https://babeljs.io/) to transform the code into a compatible syntax depending on exactly which browser and version you are targeting. Google Chrome at the time of publishing version 1.0.0 is 60, and it works as is.
 
 ### Changes from v1.0.1 -> v1.1.0
 
