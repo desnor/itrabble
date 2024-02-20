@@ -1,23 +1,17 @@
 name: CI
-on: [push]
+on: ["push", "pull_request"]
 jobs:
   build:
-    name: Build, lint, and test on Node ${{ matrix.node }} and ${{ matrix.os }}
-
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        node: ['16.x', '18.x', '20.x']
-        os: [ubuntu-latest]
-
+    name: Build, lint, test and send coverage to Coveralls
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Use Node ${{ matrix.node }}
-        uses: actions/setup-node@v1
+      - name: Use Node 20.x
+        uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 20.x
 
       - name: Install deps and build (with cache)
         uses: bahmutov/npm-install@v1
@@ -26,7 +20,9 @@ jobs:
         run: npm run lint
 
       - name: Test
-        run: npm run test --ci --coverage --maxWorkers=2
+        run: npm run coverage
 
-      - name: Build
-        run: npm run build
+      - name: Coveralls
+        uses: coverallsapp/github-action@v2.2.3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
