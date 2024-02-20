@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { from, of } from '../src/';
 
 const arrayStrings = ['a', 'b', 'c', 'd'];
@@ -11,11 +11,23 @@ const mapStrings = new Map([
 const arrayStringsIt = from(arrayStrings);
 const mapStringsIt = from(mapStrings);
 
-it('from', () => {
-  const itrabble = from([1, 2, 3]);
-  const nums = itrabble.toArray;
+describe('from', () => {
+  describe('with instance of Itrabble as param', () => {
+    it('returns instance', () => {
+      const original = from([1, 2, 3]);
+      const nums = from(original);
 
-  expect(nums).toEqual([1, 2, 3]);
+      expect(nums).toBe(original);
+    });
+  });
+  describe('with other input as param', () => {
+    it('returns itrabble of input', () => {
+      const itrabble = from([1, 2, 3]);
+      const nums = itrabble.toArray;
+
+      expect(nums).toEqual([1, 2, 3]);
+    });
+  });
 });
 
 it('of', () => {
