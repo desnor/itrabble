@@ -1,5 +1,5 @@
 import sinon from 'sinon';
-import { expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import {
   append,
@@ -52,10 +52,17 @@ it('concat', () => {
   expect([...arrayNumsIt.pipe(concat(arrayStringsIt))]).toEqual(expectedResult);
 });
 
-it('cycle', () => {
-  const expectedResult = [1, 2, 3, 4, 1, 2, 3, 4];
-  const arrayNumsIt = from(arrayNums);
-  expect([...arrayNumsIt.pipe(cycle(2))]).toEqual(expectedResult);
+describe('cycle', () => {
+  it('with no params iterates indefinitely', () => {
+    const expectedResult = [1, 2, 3, 4, 1, 2, 3, 4];
+    const arrayNumsIt = from(arrayNums);
+    expect(arrayNumsIt.pipe(cycle(), take(8)).toArray).toEqual(expectedResult);
+  });
+  it('with param iterates given number of times', () => {
+    const expectedResult = [1, 2, 3, 4, 1, 2, 3, 4];
+    const arrayNumsIt = from(arrayNums);
+    expect([...arrayNumsIt.pipe(cycle(2))]).toEqual(expectedResult);
+  });
 });
 
 it('first', () => {
