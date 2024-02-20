@@ -1,5 +1,5 @@
-import test from 'ava';
 import sinon from 'sinon';
+import { expect, it } from 'vitest';
 
 import {
   append,
@@ -26,7 +26,7 @@ import {
   zip,
   zipAll,
   zipWith,
-} from '../dist/index.js';
+} from '../src';
 
 const arrayStrings = ['a', 'b', 'c', 'd'];
 const arrayNums = [1, 2, 3, 4];
@@ -37,223 +37,220 @@ const mapNums = new Map([
   [4, 40],
 ]);
 
-test('append', (t) => {
+it('append', () => {
   const expectedResult = [1, 2, 3, 4, 'a', 'b', 'c', 'd'];
   const arrayNumsIt = from(arrayNums);
-  t.deepEqual(
-    [...arrayNumsIt.pipe(append('a', 'b', 'c', 'd'))],
+  expect([...arrayNumsIt.pipe(append('a', 'b', 'c', 'd'))]).toEqual(
     expectedResult
   );
 });
 
-test('concat', (t) => {
+it('concat', () => {
   const expectedResult = [1, 2, 3, 4, 'a', 'b', 'c', 'd'];
   const arrayNumsIt = from(arrayNums);
   const arrayStringsIt = from(arrayStrings);
-  t.deepEqual([...arrayNumsIt.pipe(concat(arrayStringsIt))], expectedResult);
+  expect([...arrayNumsIt.pipe(concat(arrayStringsIt))]).toEqual(expectedResult);
 });
 
-test('cycle', (t) => {
+it('cycle', () => {
   const expectedResult = [1, 2, 3, 4, 1, 2, 3, 4];
   const arrayNumsIt = from(arrayNums);
-  t.deepEqual([...arrayNumsIt.pipe(cycle(2))], expectedResult);
+  expect([...arrayNumsIt.pipe(cycle(2))]).toEqual(expectedResult);
 });
 
-test('first', (t) => {
+it('first', () => {
   const expectedResult = 'a';
   const arrayStringsIt = from(arrayStrings);
-  t.deepEqual([...arrayStringsIt.pipe(first())][0], expectedResult);
+  expect([...arrayStringsIt.pipe(first())][0]).toEqual(expectedResult);
 });
 
-test('last', (t) => {
+it('last', () => {
   const expectedResult = 'd';
   const arrayStringsIt = from(arrayStrings);
 
-  t.deepEqual([...arrayStringsIt.pipe(last())][0], expectedResult);
+  expect([...arrayStringsIt.pipe(last())][0]).toEqual(expectedResult);
 });
 
-test('take', (t) => {
+it('take', () => {
   const expectedResult = ['a', 'b'];
   const arrayStringsIt = from(arrayStrings);
 
-  t.deepEqual([...arrayStringsIt.pipe(take(2))], expectedResult);
+  expect([...arrayStringsIt.pipe(take(2))]).toEqual(expectedResult);
 });
 
-test('take with offset', (t) => {
+it('take with offset', () => {
   const expectedResult = ['b', 'c'];
   const arrayStringsIt = from(arrayStrings);
 
-  t.deepEqual([...arrayStringsIt.pipe(take(2, 1))], expectedResult);
+  expect([...arrayStringsIt.pipe(take(2, 1))]).toEqual(expectedResult);
 });
 
-test('takeUntil', (t) => {
+it('takeUntil', () => {
   const expectedResult = ['a', 'b'];
   const arrayStringsIt = from(arrayStrings);
 
-  t.deepEqual(
-    [...arrayStringsIt.pipe(takeUntil((x) => x === 'c'))],
+  expect([...arrayStringsIt.pipe(takeUntil((x) => x === 'c'))]).toEqual(
     expectedResult
   );
 });
 
-test('takeWhile', (t) => {
+it('takeWhile', () => {
   const expectedResult = [1, 2, 3];
   const arrayNumsIt = from(arrayNums);
 
-  t.deepEqual([...arrayNumsIt.pipe(takeWhile((x) => x < 4))], expectedResult);
-});
-
-test('skipUntil', (t) => {
-  const expectedResult = ['c', 'd'];
-  const arrayStringsIt = from(arrayStrings);
-
-  t.deepEqual(
-    [...arrayStringsIt.pipe(skipUntil((x) => x === 'c'))],
+  expect([...arrayNumsIt.pipe(takeWhile((x) => x < 4))]).toEqual(
     expectedResult
   );
 });
 
-test('skipWhile', (t) => {
-  const expectedResult = [3, 4];
-  const arrayNumsIt = from(arrayNums);
-
-  t.deepEqual([...arrayNumsIt.pipe(skipWhile((x) => x < 3))], expectedResult);
-});
-
-test('skip', (t) => {
+it('skipUntil', () => {
   const expectedResult = ['c', 'd'];
   const arrayStringsIt = from(arrayStrings);
 
-  t.deepEqual([...arrayStringsIt.pipe(skip(2))], expectedResult);
+  expect([...arrayStringsIt.pipe(skipUntil((x) => x === 'c'))]).toEqual(
+    expectedResult
+  );
 });
 
-test('forEach', (t) => {
+it('skipWhile', () => {
+  const expectedResult = [3, 4];
+  const arrayNumsIt = from(arrayNums);
+
+  expect([...arrayNumsIt.pipe(skipWhile((x) => x < 3))]).toEqual(
+    expectedResult
+  );
+});
+
+it('skip', () => {
+  const expectedResult = ['c', 'd'];
+  const arrayStringsIt = from(arrayStrings);
+
+  expect([...arrayStringsIt.pipe(skip(2))]).toEqual(expectedResult);
+});
+
+it('forEach', () => {
   const log = sinon.stub().returns((x) => x);
 
   const expectedResult = ['a', 'b', 'c', 'd'];
   const arrayStringsIt = from(arrayStrings);
 
-  t.deepEqual([...arrayStringsIt.pipe(forEach(log))], expectedResult);
+  expect([...arrayStringsIt.pipe(forEach(log))]).toEqual(expectedResult);
 
-  t.is(log.callCount, arrayStrings.length);
-  t.is(log.calledWith('a'), true);
-  t.is(log.calledWith('b'), true);
-  t.is(log.calledWith('c'), true);
-  t.is(log.calledWith('d'), true);
+  expect(log.callCount).toBe(arrayStrings.length);
+  expect(log.calledWith('a')).toBe(true);
+  expect(log.calledWith('b')).toBe(true);
+  expect(log.calledWith('c')).toBe(true);
+  expect(log.calledWith('d')).toBe(true);
 });
 
-test('eachChunk with even n chunks', (t) => {
+it('eachChunk with even n chunks', () => {
   const log = sinon.stub().returns((x) => x);
 
   const expectedResult = ['a', 'b', 'c', 'd'];
   const arrayStringsIt = from(arrayStrings);
 
-  t.deepEqual([...arrayStringsIt.pipe(eachChunk(2, log))], expectedResult);
+  expect([...arrayStringsIt.pipe(eachChunk(2, log))]).toEqual(expectedResult);
 
-  t.is(log.callCount, 2);
-  t.is(log.calledWith('a', 'b'), true);
-  t.is(log.calledWith('c', 'd'), true);
+  expect(log.callCount).toBe(2);
+  expect(log.calledWith('a', 'b')).toBe(true);
+  expect(log.calledWith('c', 'd')).toBe(true);
 });
 
-test('eachChunk with odd n chunks', (t) => {
+it('eachChunk with odd n chunks', () => {
   const log = sinon.stub().returns((x) => x);
 
   const expectedResult = ['a', 'b', 'c', 'd'];
   const oddChunks = 3;
   const arrayStringsIt = from(arrayStrings);
 
-  t.deepEqual(
-    [...arrayStringsIt.pipe(eachChunk(oddChunks, log))],
+  expect([...arrayStringsIt.pipe(eachChunk(oddChunks, log))]).toEqual(
     expectedResult
   );
 
-  t.is(log.callCount, 2);
-  t.is(log.calledWith('a', 'b', 'c'), true);
-  t.is(log.calledWith('d'), true);
+  expect(log.callCount).toBe(2);
+  expect(log.calledWith('a', 'b', 'c')).toBe(true);
+  expect(log.calledWith('d')).toBe(true);
 });
 
-test('eachChunk with illegal chunk size throws error', (t) => {
+it('eachChunk with illegal chunk size throws error', () => {
   const log = sinon.stub().returns((x) => x);
 
   const n = -1;
   const expectedError = `Chunk size must be at least 1: ${n} given`;
   const arrayStringsIt = from(arrayStrings);
 
-  const error = t.throws(() => [...arrayStringsIt.pipe(eachChunk(n, log))], {
-    instanceOf: RangeError,
-  });
-
-  t.is(error.message, expectedError);
+  expect(() => [...arrayStringsIt.pipe(eachChunk(n, log))]).toThrow(
+    new RangeError(expectedError)
+  );
 });
 
-test('seq', (t) => {
+it('seq', () => {
   const expectedResult = ['a', 'c'];
   const arrayStringsIt = from(arrayStrings);
 
-  t.deepEqual([...arrayStringsIt.pipe(seq(2))], expectedResult);
+  expect([...arrayStringsIt.pipe(seq(2))]).toEqual(expectedResult);
 });
 
-test('seq with offset', (t) => {
+it('seq with offset', () => {
   const expectedResult = ['b', 'd'];
   const arrayStringsIt = from(arrayStrings);
 
-  t.deepEqual([...arrayStringsIt.pipe(seq(2, 1))], expectedResult);
+  expect([...arrayStringsIt.pipe(seq(2, 1))]).toEqual(expectedResult);
 });
 
-test('map', (t) => {
+it('map', () => {
   const expectedArrayResult = [3, 6, 9, 12];
   const expectedMapResult = [10, 40, 90, 160];
   const arrayNumsIt = from(arrayNums);
   const mapNumsIt = from(mapNums);
 
-  t.deepEqual([...arrayNumsIt.pipe(map((x) => x * 3))], expectedArrayResult);
-  t.deepEqual([...mapNumsIt.pipe(map(([k, v]) => k * v))], expectedMapResult);
+  expect([...arrayNumsIt.pipe(map((x) => x * 3))]).toEqual(expectedArrayResult);
+  expect([...mapNumsIt.pipe(map(([k, v]) => k * v))]).toEqual(
+    expectedMapResult
+  );
 });
 
-test('filter', (t) => {
+it('filter', () => {
   const expectedResult = [1, 2, 3];
   const arrayNumsIt = from(arrayNums);
 
-  t.deepEqual([...arrayNumsIt.pipe(filter((x) => x < 4))], expectedResult);
+  expect([...arrayNumsIt.pipe(filter((x) => x < 4))]).toEqual(expectedResult);
 });
 
-test('prepend', (t) => {
+it('prepend', () => {
   const expectedResult = ['a', 'b', 'c', 'd', 1, 2, 3, 4];
   const arrayNumsIt = from(arrayNums);
-  t.deepEqual(
-    [...arrayNumsIt.pipe(prepend('a', 'b', 'c', 'd'))],
+  expect([...arrayNumsIt.pipe(prepend('a', 'b', 'c', 'd'))]).toEqual(
     expectedResult
   );
 });
 
-test('reject', (t) => {
+it('reject', () => {
   const expectedResult = [3, 4];
   const arrayNumsIt = from(arrayNums);
 
-  t.deepEqual([...arrayNumsIt.pipe(reject((x) => x < 3))], expectedResult);
+  expect([...arrayNumsIt.pipe(reject((x) => x < 3))]).toEqual(expectedResult);
 });
 
-test('reduce', (t) => {
+it('reduce', () => {
   const expectedResult = [10];
   const arrayNumsIt = from(arrayNums);
 
-  t.deepEqual(
-    [...arrayNumsIt.pipe(reduce((acc, x) => acc + x, 0))],
+  expect([...arrayNumsIt.pipe(reduce((acc, x) => acc + x, 0))]).toEqual(
     expectedResult
   );
 });
 
-test('scan', (t) => {
+it('scan', () => {
   const expectedResult = [1, 3, 6, 10];
   const arrayNumsIt = from(arrayNums);
 
-  t.deepEqual(
-    [...arrayNumsIt.pipe(scan((acc, x) => acc + x, 0))],
+  expect([...arrayNumsIt.pipe(scan((acc, x) => acc + x, 0))]).toEqual(
     expectedResult
   );
 });
 
-test('zip', (t) => {
+it('zip', () => {
   const expectedResult = [
     ['a', 1],
     ['b', 2],
@@ -262,10 +259,10 @@ test('zip', (t) => {
   ];
   const arrayStringsIt = from(arrayStrings);
 
-  t.deepEqual([...arrayStringsIt.pipe(zip(arrayNums))], expectedResult);
+  expect([...arrayStringsIt.pipe(zip(arrayNums))]).toEqual(expectedResult);
 });
 
-test('zipAll', (t) => {
+it('zipAll', () => {
   const expectedResult = [
     ['a', 1],
     ['b', 2],
@@ -276,28 +273,25 @@ test('zipAll', (t) => {
 
   const arrayStringsIt = from(arrayStrings.concat('e'));
 
-  t.deepEqual([...arrayStringsIt.pipe(zipAll(arrayNums))], expectedResult);
+  expect([...arrayStringsIt.pipe(zipAll(arrayNums))]).toEqual(expectedResult);
 });
 
-test('zipWith', (t) => {
+it('zipWith', () => {
   const simpleResult = ['a1', 'b2', 'c3', 'd4'];
   const complexResult = ['a-2-1-10', 'b-4-2-20', 'c-6-3-30', 'd-8-4-40'];
   const arrayStringsIt = from(arrayStrings);
 
-  t.deepEqual(
-    [...arrayStringsIt.pipe(zipWith((str, num) => str + num, arrayNums))],
-    simpleResult
-  );
-  t.deepEqual(
-    [
-      ...arrayStringsIt.pipe(
-        zipWith(
-          (str, num, [ones, tens]) => `${str}-${num * 2}-${ones}-${tens}`,
-          arrayNums,
-          mapNums
-        )
-      ),
-    ],
-    complexResult
-  );
+  expect([
+    ...arrayStringsIt.pipe(zipWith((str, num) => str + num, arrayNums)),
+  ]).toEqual(simpleResult);
+
+  expect([
+    ...arrayStringsIt.pipe(
+      zipWith(
+        (str, num, [ones, tens]) => `${str}-${num * 2}-${ones}-${tens}`,
+        arrayNums,
+        mapNums
+      )
+    ),
+  ]).toEqual(complexResult);
 });
