@@ -1,6 +1,9 @@
 export { append } from './append.js';
 export { concat } from './concat.js';
 export { cycle } from './cycle.js';
+export { distinct } from './distinct.js';
+export { distinctBy } from './distinctBy.js';
+export { distinctUntilChanged } from './distinctUntilChanged.js';
 export { eachChunk } from './eachChunk.js';
 export { filter } from './filter.js';
 export { first } from './first.js';

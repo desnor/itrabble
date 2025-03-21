@@ -5,6 +5,9 @@ import {
   append,
   concat,
   cycle,
+  distinct,
+  distinctBy,
+  distinctUntilChanged,
   eachChunk,
   filter,
   first,
@@ -63,6 +66,27 @@ describe('cycle', () => {
     const arrayNumsIt = from(arrayNums);
     expect([...arrayNumsIt.pipe(cycle(2))]).toEqual(expectedResult);
   });
+});
+
+it('distinct', () => {
+  const expectedResult = arrayStrings;
+  const arrayStringsIt = from([...arrayStrings, 'b', 'a']);
+  expect([...arrayStringsIt.pipe(distinct())]).toEqual(expectedResult);
+});
+
+it('distinctBy', () => {
+  const expectedResult = [1, 2];
+  const arrayStringsIt = from(arrayNums);
+  expect([...arrayStringsIt.pipe(distinctBy((x) => x % 2))]).toEqual(
+    expectedResult
+  );
+});
+it('distinctUntilChanged', () => {
+  const expectedResult = [1, 2, 3, 4, 5];
+  const arrayStringsIt = from([1, 1, 2, 2, 3, 4, 5]);
+  expect([...arrayStringsIt.pipe(distinctUntilChanged())]).toEqual(
+    expectedResult
+  );
 });
 
 it('first', () => {
